@@ -1,5 +1,5 @@
 """
-WSGI config for TechStaffApp project.
+WSGI config for techstaff project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'TechStaffApp.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'techstaff.settings')
 
 application = get_wsgi_application()
