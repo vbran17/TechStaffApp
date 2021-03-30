@@ -2,13 +2,13 @@ from django.shortcuts import render
 
 # Create your views here.
 def home(request):
-    return render(request, 'inventory/base.html')
+    return render(request, 'inventory/home.html')
 
 def login(request):
     return render(request, 'events/index.html')
 
 def ipdash(request):
-    return render(request, 'events/index.html')
+    return render(request, 'events/ip-dashboard.html')
 
 def searchresults(request):
     return render(request, 'events/index.html')
