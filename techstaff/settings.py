@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# FOR STATIC FILES (.css and .js)
+STATIC_URL = '/static/'
+
 
 # Application definition
 
