@@ -1,29 +1,45 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import Permission, User
+from django.contrib.auth import authenticate, login, logout
+
+
 
 # Create your views here.
-def home(request):
+def home_view(request):
     return render(request, 'inventory/home.html')
 
-def login(request):
-    return render(request, 'events/index.html')
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('/home')
+    return render(request, 'auth/login.html')
 
-def ipdash(request):
+def logout_view(request):
+    logout(request)
+    # redirect to a success page.
+        
+
+def ipdash_view(request):
     return render(request, 'events/ip-dashboard.html')
 
-def searchresults(request):
+def searchresults_view(request):
     return render(request, 'events/index.html')
 
-def itemdetails(request):
+def itemdetails_view(request):
     return render(request, 'events/index.html')
  
-def addequipment(request):
+def addequipment_view(request):
     return render(request, 'events/index.html')
 
-def homeuseform(request):
+def homeuseform_view(request):
     return render(request, 'events/index.html')
  
-def networkform(request):
+def networkform_view(request):
     return render(request, 'events/index.html')
 
-def searchqueryform(request):
+def searchqueryform_view(request):
     return render(request, 'events/index.html')
