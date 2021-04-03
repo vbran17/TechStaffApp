@@ -1,11 +1,22 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import Permission, User
 from django.contrib.auth import authenticate, login, logout
+from .models import Equipment
+from django.http import JsonResponse
+import json
 
 
 
 # Create your views here.
 def home_view(request):
+    if request.method == 'POST':
+        search_str = json.loads(request.body).get('searchText')
+        equipments = Equipment.filter(manufacturer_model__starts_with=search_str)
+        data = equipments.values()
+
+        return JsonResponse(list(data), safe=False)
+
+
     return render(request, 'inventory/home.html')
 
 def login_view(request):

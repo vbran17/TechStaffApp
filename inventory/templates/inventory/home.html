@@ -1,7 +1,11 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} 
+{% load static %}
+{% block content %}
 <div>
+<!-- Title -->
   <h1 class="d-flex justify-content-center align-items-center">Home</h1>
-  <div>
+  <!-- Search Bar -->
+  <div class="row">
     <div class="input-group">
       <button
         class="btn btn-outline-secondary dropdown-toggle"
@@ -22,11 +26,56 @@
         <li><a class="dropdown-item" href="#">IPV4 Address</a></li>
         <li><a class="dropdown-item" href="#">IPV6 Address </a></li>
       </ul>
-      <input type="text" class="form-control" aria-label="Search" />
+      <input id="searchField" type="text" class="form-control" aria-label="Search" />
       <button class="btn btn-outline-secondary" type="button">
         <i class="bi bi-search"></i>
       </button>
     </div>
   </div>
+  <!-- Actions -->
+  <div class="row">
+  </div>
+  <!-- Search Results Table-->
+  <div class="row">
+    <h2 class="d-flex justify-content-center align-items-center">
+      Search Results
+    </h2>
+    <div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Handle</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo</td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>@fat</td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td colspan="2">Larry the Bird</td>
+            <td>@twitter</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
 </div>
+<script src="{% static 'js/searchEquipments.js' %}">
+</script>
 {% endblock %}
