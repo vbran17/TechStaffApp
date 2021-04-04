@@ -40,7 +40,49 @@
     <h2 class="d-flex justify-content-center align-items-center">
       Search Results
     </h2>
-    <div>{% include "inventory/searchEquipmentResultsTable.html"%}</div>
+    <div>
+    </div>
+    <div class="table-responsive" >
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Handle</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo
+              &nbsp;&nbsp;&nbsp;<a href="/itemdetails/1/"><button class="btn btn-outline-secondary" type="button" 
+              style="font-size: 14px; padding: 2px;">View</button></a>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>@fat
+              &nbsp;&nbsp;&nbsp;<a href="/itemdetails/1/"><button class="btn btn-outline-secondary" type="button" 
+                style="font-size: 14px; padding: 2px;">View</button></a>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td colspan="2">Larry the Bird</td>
+            <td>@twitter
+              &nbsp;&nbsp;&nbsp;<a href="/itemdetails/1/"><button class="btn btn-outline-secondary" type="button" 
+                style="font-size: 14px; padding: 2px;">View</button></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
   </div>
 </div>
 

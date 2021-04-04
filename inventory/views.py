@@ -41,9 +41,10 @@ def logout_view(request):
 def ipdash_view(request):
     return render(request, 'inventory/ip-dashboard.html')
 
-def itemdetails_view(request):
-    return render(request, 'events/index.html')
-
+def itemdetails_view(request, item_id):
+    #run a query to get all the info for the item_id 
+    return render(request, 'inventory/itemdetails.html')
+ 
 def addequipment_view(request):
     return render(request, 'events/index.html')
 
