@@ -1,81 +1,47 @@
-{% extends 'base.html' %} 
-{% load static %}
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 <div>
-<!-- Title -->
+  <!-- Title -->
   <h1 class="d-flex justify-content-center align-items-center">Home</h1>
   <!-- Search Bar -->
   <div class="row">
-    <div class="input-group">
-      <button
-        class="btn btn-outline-secondary dropdown-toggle"
-        type="button"
-        data-bs-toggle="dropdown"
-        aria-expanded="true"
-      >
-        Search By
-      </button>
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="#">VT_Tag</a></li>
-        <li><a class="dropdown-item" href="#">CS_Tag</a></li>
-        <li><a class="dropdown-item" href="#">Manufacturer</a></li>
-        <li><a class="dropdown-item" href="#">Custodian</a></li>
-        <li><a class="dropdown-item" href="#">Hostname</a></li>
-        <li><a class="dropdown-item" href="#">Model</a></li>
-        <li><a class="dropdown-item" href="#">Location</a></li>
-        <li><a class="dropdown-item" href="#">IPV4 Address</a></li>
-        <li><a class="dropdown-item" href="#">IPV6 Address </a></li>
-      </ul>
-      <input id="searchField" type="text" class="form-control" aria-label="Search" />
-      <button class="btn btn-outline-secondary" type="button">
-        <i class="bi bi-search"></i>
-      </button>
-    </div>
+    <form class="d-flex" method="get">
+      {% csrf_token %}
+      <div class="input-group">
+        <select
+          id="search_by_options"
+          class="form-select"
+          name="search_options"
+        >
+          <option value="">All</option>
+          {% for k,v in options.items %} {% if selected_option == v %}
+          <option value="{{v}}" selected>{{k}}</option>
+          {% else %}
+          <option value="{{v}}">{{k}}</option>
+          {% endif %} {% endfor %}
+        </select>
+        <input
+          id="search_box"
+          type="text"
+          class="form-control"
+          aria-label="Search"
+          name="search"
+          value="{{query}}"
+        />
+        <button class="btn btn-outline-secondary" type="submit">
+          <i class="bi bi-search"></i>
+        </button>
+      </div>
+    </form>
   </div>
   <!-- Actions -->
-  <div class="row">
-  </div>
+  <div class="row"></div>
   <!-- Search Results Table-->
   <div class="row">
     <h2 class="d-flex justify-content-center align-items-center">
       Search Results
     </h2>
-    <div>
-    </div>
-    <div class="table-responsive">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
-        </tbody>
-      </table>
-      </div>
-    </div>
+    <div>{% include "inventory/searchEquipmentResultsTable.html"%}</div>
   </div>
 </div>
-<script src="{% static 'js/searchEquipments.js' %}">
-</script>
+
 {% endblock %}
