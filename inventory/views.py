@@ -36,20 +36,20 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     # redirect to a success page.
-        
+
 
 def ipdash_view(request):
-    return render(request, 'events/ip-dashboard.html')
+    return render(request, 'inventory/ip-dashboard.html')
 
 def itemdetails_view(request):
     return render(request, 'events/index.html')
- 
+
 def addequipment_view(request):
     return render(request, 'events/index.html')
 
 def homeuseform_view(request):
     return render(request, 'events/index.html')
- 
+
 def networkform_view(request):
     return render(request, 'events/index.html')
 

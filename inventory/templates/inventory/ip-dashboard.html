@@ -1,12 +1,75 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
-
+<div>
 <!--- Title of Page -->
-<h1>IP Dashboard</h1>
+<h1 class="d-flex justify-content-center align-items-center">IP Dashboard</h1>
 
 <!--- Dropdowns for Office, IP Filters, and Button for Adding IPs --->
+<!-- <<label for=""></label> -->
+  <div class="row">
+    <div class="input-group">
+      <label for="officeLabel">Office</label>
+      <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="true">
+        -- OFFICE --
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="#">McBryde</a></li>
+        <li><a class="dropdown-item" href="#">Lowry</a></li>
+        <li><a class="dropdown-item" href="#">NCB</a></li>
+        <li><a class="dropdown-item" href="#">Holden</a></li>
+        <li><a class="dropdown-item" href="#">Goodwin</a></li>
+        <li><a class="dropdown-item" href="#">ADD NEW OFFICE +</a></li>
+      </ul>
+      <!-- <input id="searchField" type="text" class="form-control" aria-label="Search" />
+      <button class="btn btn-outline-secondary" type="button">
+        <i class="bi bi-search"></i>
+      </button> -->
+    <!-- </div>
 
+    <div class="input-group"> -->
+      <label for="viewsLabel">Views</label>
+      <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="true">
+        -- VIEWS --
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="#">Hostnames</a></li>
+        <li><a class="dropdown-item" href="#">Assigned IPV4s</a></li>
+        <li><a class="dropdown-item" href="#">All Generated IPV4s</a></li>
+        <li><a class="dropdown-item" href="#">Assigned IPV6s</a></li>
+        <li><a class="dropdown-item" href="#">All Generated IPV6s</a></li>
+      </ul>
+      <!-- <input id="searchField" type="text" class="form-control" aria-label="Search" />
+      <button class="btn btn-outline-secondary" type="button">
+        <i class="bi bi-search"></i>
+      </button> -->
+    </div>
+
+  </div>
+<nav class="navbar top-navbar navbar-light bg-light px-9">
+  <div class="row">
+    <div class="input-group">
+      <input id="searchField" type="text" class="form-control" aria-label="Search" />
+      <button class="btn btn-outline-secondary" type="button">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </div>
+  <div class="submit-row">
+    <input type="submit" value="Add Hostname" name="addHostButton">
+  </div>
+  <div class="submit-row">
+    <input type="submit" value="Add IPs" name="addIPButton">
+  </div>
+</nav>
+<nav class="navbar top-navbar navbar-light bg-light px-9">
+  <div class="row">
+    <label for="filler">Select an office to view IPs</label>
+  </div>
+</nav>
 <!--- Display Area for IP Addresses --->
 
+
+
+</div>
 {% endblock %}
