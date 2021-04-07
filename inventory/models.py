@@ -29,7 +29,7 @@ class Equipment(models.Model):
     room = models.CharField(max_length=15)
     sdate = models.DateField()
     manufacturer_model = models.CharField(max_length=255)
-    serial_number = models.PositiveBigIntegerField()
+    serial_number = models.CharField(max_length=255)
     description = models.CharField(max_length=1000)
     classification =  models.CharField(max_length=255)
     custodian = models.CharField(max_length=255)
@@ -46,8 +46,6 @@ class Equipment(models.Model):
     status = models.CharField(max_length =128)
     mailexhange = models.SmallIntegerField()
     cstag = models.CharField(max_length=255)
-    'checkuse_name = models.CharField(max_field=255)'
-    'checkuse_contact = models.CharField(max_field=128)'
 
 class Checkout(models.Model):
     contact = models.ForeignKey(PersonalID, on_delete=models.RESTRICT)
