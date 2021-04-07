@@ -1,0 +1,91 @@
+{% extends 'base.html' %} 
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/addequipment.css' %}" />
+<link
+    href="https://www.cssscript.com/demo/sticky.css"
+    rel="stylesheet"
+    type="text/css"
+/>
+<!-- Title -->
+<h2 class="d-flex justify-content-center align-items-center" style="padding: 10px; font-size: 40pt; padding-bottom: 50px;">Add Equipment</h2>
+<div class="row" style="width: 100%;">
+    <div class="column">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th id="title" colspan="2">Details </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>CS Tag  </th>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <th>Custodian</th>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <th>Hostname</th>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <th>Location</th>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <th>Manufacturer</th>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <th>Model</th>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <th>VT Tag</th>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <th>IPv4</th>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <th>IPv6</th>
+                    <td><input type="text"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="column">
+        <table class="table table-responsive" >
+            <thead>
+                <tr>
+                    <th id="title">History </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><b><a id="date" ></a></b> New Equipment added  </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>   
+</div> 
+<div id="rows" class="row">
+    <div class="col"> 
+        <a href="/home/"><button id="left-btn" class="btn btn-outline-secondary" type="button" >
+            Submit Equipment
+        </button></a>
+    
+        <a href="/home/"><button id="right-btn" class="btn btn-outline-secondary" type="button">
+            Cancel
+        </button></a>
+    </div>
+</div>
+<script>
+    let d = new Date();
+    document.getElementById("date").innerHTML = d;
+</script>
+
+{% endblock %}

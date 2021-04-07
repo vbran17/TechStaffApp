@@ -46,7 +46,7 @@ def itemdetails_view(request, item_id):
     return render(request, 'inventory/itemdetails.html')
  
 def addequipment_view(request):
-    return render(request, 'events/index.html')
+    return render(request, 'inventory/addequipment.html')
 
 def homeuseform_view(request):
     return render(request, 'events/index.html')
