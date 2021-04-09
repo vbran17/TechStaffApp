@@ -37,6 +37,9 @@
   <div class="row">
   <div class="col">
     <a href="/addequipment" class="btn btn-outline-secondary" role="button">Add Equipment</a>
+    <a href="/home/DNS_Form/"><button id="left-btn" class="btn btn-outline-secondary" type="button">
+      Generate DNS Form
+  </button></a>
   </div>
   </div>
   <!-- Search Results Table-->
@@ -68,7 +71,7 @@
             <td>{{ equipment.sdate }}</td>
             <td>{{ equipment.vttag }}</td>
             <td>
-             <a href="/itemdetails/1/"
+             <a href="/itemdetails/{{equipment.id}}/"
                 ><button
                   class="btn btn-outline-secondary"
                   type="button"
@@ -77,6 +80,7 @@
                   View
                 </button></a
               >
+              
             </td>
           </tr>
         {% endfor %}

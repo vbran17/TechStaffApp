@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import Permission, User
 from django.contrib.auth import authenticate, login, logout
-from .models import Equipment
+from .models import Equipment, Building, IP, History
 from django.db.models import Q
-
+import csv
+from django.http import HttpResponse
 
 
 # Create your views here.
@@ -43,8 +44,40 @@ def ipdash_view(request):
 
 def itemdetails_view(request, item_id):
     #run a query to get all the info for the item_id 
-    return render(request, 'inventory/itemdetails.html')
+    id_item = int(item_id)
+    temp = 'This is the ID %i' % (id_item)
+    print(temp)
+
+    item_list = Equipment.objects.filter(id=id_item) 
+    # if len(item_list) == 0:
+    item = item_list[0]
+        # print(item)
+    executore = "carnold@vt.edu"
+    history = History.objects.filter(executor=executore)
+    print(history)
+    return render(request, 'inventory/itemdetails.html', {'item': item, 'history': history})
  
+def dns_view(request):
+    items = Equipment.objects.all()
+    size = len(items)
+    results = 'Search returned %i items(s)' % (size)
+    value = 0
+    
+    response = HttpResponse(content_type='text/csv')  
+    response['Content-Disposition'] = 'attachment; filename="dns.csv"'  
+    writer = csv.writer(response)  
+    writer.writerow([results])  
+    writer.writerow(['CS Tag', 'Custodian', 'Hostname', 'Location', 'Manufacturer-Model', 'VT Tag'])  
+    for i in items:
+        value = value + int(i.pvalue)
+        writer.writerow([i.cstag, i.custodian, i.hostname, i.building.name, i.manufacturer_model, i.vttag])  
+    total = 'Total value: $%i' % (value)
+    print(results)
+    print(total)
+    
+    writer.writerow([total])
+    return response  
+
 def addequipment_view(request):
     return render(request, 'inventory/addequipment.html')
 

@@ -9,6 +9,7 @@
 />
     <!-- Title -->
     <h2 class="d-flex justify-content-center align-items-center" style="padding: 10px; font-size: 40pt; padding-bottom: 50px;">Equipment Page</h2>
+{% if item is not None %}
 <div class="row" style="width: 100%;">
     <div class="column">
         <table class="table table-responsive">
@@ -20,39 +21,39 @@
             <tbody>
                 <tr>
                     <th>CS Tag</th>
-                    <td contenteditable="true">1549876</td>
+                    <td contenteditable="true">{{ item.cstag }}</td>
                 </tr>
                 <tr>
                     <th>Custodian</th>
-                    <td contenteditable="true">John Doe</td>
+                    <td contenteditable="true">{{ item.custodian }}</td>
                 </tr>
                 <tr>
                     <th>Hostname</th>
-                    <td contenteditable="true">Newman Lib</td>
+                    <td contenteditable="true">{{ item.hostname }}</td>
                 </tr>
                 <tr>
                     <th>Location</th>
-                    <td contenteditable="true">McBryde 1106</td>
+                    <td contenteditable="true">{{ item.building.name }}</td>
                 </tr>
                 <tr>
                     <th>Manufacturer</th>
-                    <td contenteditable="true">DELL</td>
+                    <td contenteditable="true">{{ item.manufacturer_model }}</td>
                 </tr>
                 <tr>
                     <th>Model</th>
-                    <td contenteditable="true">PSX10</td>
+                    <td contenteditable="true">{{ item.manufacturer_model }}</td>
                 </tr>
                 <tr>
                     <th>VT Tag</th>
-                    <td contenteditable="true">VT-109364987</td>
+                    <td contenteditable="true">{{ item.vttag }}</td>
                 </tr>
                 <tr>
                     <th>IPv4</th>
-                    <td contenteditable="true"></td>
+                    <td contenteditable="true">{{ item.ip.address }}</td>
                 </tr>
                 <tr>
                     <th>IPv6</th>
-                    <td contenteditable="true">Pre-fix:1235:3465:6568</th>
+                    <td contenteditable="true">{{ item.building.ipv6_prefix }}</th>
                 </tr>
             </tbody>
         </table>
@@ -65,92 +66,25 @@
                 </tr>
             </thead>
             <tbody>
+                {% for histories in history %}
                 <tr>
-                    <td>Really long comment with everything you need to know </td>
+                    <td><b>Command: </b>{{ histories.command }}
+                    <b>Execution Time: </b>{{ histories.execution_time }}
+                    <b>Executor: </b>{{ histories.executor }}</td>
                 </tr>
-                <tr>
-                    <td>Really long comment with everything you need to know </td>
-                </tr>
-                <tr>
-                    <td>Really long comment with everything you need to know </td>
-                </tr>
-                <tr>
-                    <td>Really long comment with everything you need to know </td>
-                </tr>
-                <tr>
-                    <td>Really long comment with everything you need to know </td>
-                </tr>
-                <tr>
-                    <td>Really long comment with everything you need to know </td>
-                </tr>
-                <tr>
-                    <td>Really long comment with everything you need to know </td>
-                </tr>
-                <tr>
-                    <td>Really long comment with everything you need to know </td>
-                </tr>
-                <tr>
-                    <td>Really long comment with everything you need to know </td>
-                </tr>
-                <tr>
-                    <td>Really long comment with everything you need to know </td>
-                </tr>
-                <tr>
-                    <td>Really long comment with everything you need to know </td>
-                </tr>
-                <tr>
-                    <td>Really long comment with everything you need to know </td>
-                </tr>
-                <tr>
-                    <td>Really long comment with everything you need to know </td>
-                </tr>
-                <tr>
-                    <td>Really long comment with everything you need to know </td>
-                </tr>
-                <tr>
-                    <td>Really long comment with everything you need to know </td>
-                </tr>
-                <tr>
-                    <td>Really long comment with everything you need to know </td>
-                </tr>
-                <tr>
-                    <td>Really long comment with everything you need to know </td>
-                </tr>
-                <tr>
-                    <td>Really long comment with everything you need to know </td>
-                </tr>
-                <tr>
-                    <td>Really long comment with everything you need to know </td>
-                </tr>
-                <tr>
-                    <td>Really long comment with everything you need to know </td>
-                </tr>
-                <tr>
-                    <td>Really long comment with everything you need to know </td>
-                </tr>
-                <tr>
-                    <td>Really long comment with everything you need to know </td>
-                </tr>
-                <tr>
-                    <td>Really long comment with everything you need to know </td>
-                </tr>
-                <tr>
-                    <td>Really long comment with everything you need to know </td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>   
 </div> 
 <div id="rows" class="row" style="padding: 5%;">
     <div class="col"> 
-        <button id="left-btn" class="btn btn-outline-secondary" type="button">
-            Generate DNS Form
-        </button>
+        
     
         <a href="/home/"><button id="right-btn" class="btn btn-outline-secondary" type="button">
             Delete Item
         </button></a>
     </div>
 </div>
-
+{% endif %}
 {% endblock %}

@@ -8,6 +8,7 @@ app_name = 'inventory'
 urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('home/', views.home_view, name='home'),
+    path('home/DNS_Form/', views.dns_view, name='dns'),
     path('ipdashboard/', views.ipdash_view, name='ipdashboard'),
     path('itemdetails/<int:item_id>/', views.itemdetails_view, name='itemdetails'),
     path('addequipment/', views.addequipment_view, name='addequipment'),
