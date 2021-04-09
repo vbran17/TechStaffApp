@@ -49,19 +49,26 @@
       <table class="table table-hover">
         <thead>
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
+            <th scope="col">CS Tag</th>
+            <th scope="col">Custodian</th>
+            <th scope="col">Hostname</th>
+            <th scope="col">Manufacturer/Model</th>
+            <th scope="col">Last Scanned</th>
+            <th scope="col">VT Tag</th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
+        {% for equipment in equipments %}
+        <tr>
+            <th scope="row">{{ equipment.cstag }}</th>
+            <td>{{ equipment.custodian }}</td>
+            <td>{{ equipment.hostname }}</td>
+            <td>{{ equipment.manufacturer_model }}</td>
+            <td>{{ equipment.sdate }}</td>
+            <td>{{ equipment.vttag }}</td>
             <td>
-              @mdo &nbsp;&nbsp;&nbsp;<a href="/itemdetails/1/"
+             <a href="/itemdetails/1/"
                 ><button
                   class="btn btn-outline-secondary"
                   type="button"
@@ -72,37 +79,8 @@
               >
             </td>
           </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>
-              @fat &nbsp;&nbsp;&nbsp;<a href="/itemdetails/1/"
-                ><button
-                  class="btn btn-outline-secondary"
-                  type="button"
-                  style="font-size: 14px; padding: 2px"
-                >
-                  View
-                </button></a
-              >
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td colspan="2">Larry the Bird</td>
-            <td>
-              @twitter &nbsp;&nbsp;&nbsp;<a href="/itemdetails/1/"
-                ><button
-                  class="btn btn-outline-secondary"
-                  type="button"
-                  style="font-size: 14px; padding: 2px"
-                >
-                  View
-                </button></a
-              >
-            </td>
-          </tr>
+        {% endfor %}
+          
         </tbody>
       </table>
     </div>
