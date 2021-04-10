@@ -5,6 +5,7 @@ from .models import Equipment, Building, IP, History
 from django.db.models import Q
 import csv
 from django.http import HttpResponse
+from .models import EquipmentForm
 
 
 # Create your views here.
@@ -79,7 +80,10 @@ def dns_view(request):
     return response  
 
 def addequipment_view(request):
-    return render(request, 'inventory/addequipment.html')
+    form = EquipmentForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+    return render(request, 'inventory/addequipment.html', {'form':form})
 
 def homeuseform_view(request):
     return render(request, 'events/index.html')
