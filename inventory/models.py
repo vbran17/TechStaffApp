@@ -1,6 +1,4 @@
 from django.db import models
-from django.forms import ModelForm
-from django import forms
 
 # Create your models here.
 class PersonalID(models.Model):
@@ -37,7 +35,7 @@ class Equipment(models.Model):
     porder = models.CharField(max_length=255, blank=True)
     pdate = models.DateField(blank=True)
     pvalue = models.CharField(max_length=255, blank=True)
-    acquistion_date = models.DateField(blank=True)
+    acquisition_date = models.DateField(blank=True)
     ip = models.ForeignKey(IP, on_delete=models.RESTRICT, blank=True)
     hostname = models.CharField(max_length=255, blank=True)
     history  = models.ForeignKey(History, on_delete=models.RESTRICT, blank=True)
@@ -47,18 +45,6 @@ class Equipment(models.Model):
     mailexhange = models.SmallIntegerField(blank=True)
     cstag = models.CharField(max_length=255, blank=True)
     notes = models.CharField(max_length=10000, blank=True)
-
-class EquipmentForm(ModelForm):
-    class Meta:
-        model = Equipment
-        CLASSIFICTATIONS = (('', '---------'),('laptop', 'Laptop'), ('desktop', 'Desktop'))
-        CUSTODIANS = (('', '--------------------'),('rich', 'Richard Charles'), ('chris', 'Chris Arnold'), ('mike', 'Micheal Davis'))
-        widgets = {'classification': forms.Select(choices=CLASSIFICTATIONS), 
-                    'custodian': forms.Select(choices=CUSTODIANS), 
-                    'notes': forms.Textarea(attrs={'cols': 40, 'rows': 3}), 
-                    'description': forms.Textarea(attrs={'cols': 40, 'rows': 3}), 
-                    'pdate': forms.DateInput(attrs={'data-target': '.datepicker'})}
-        exclude = ['history']
 
 class Checkout(models.Model):
     contact = models.ForeignKey(PersonalID, on_delete=models.RESTRICT, blank=True)

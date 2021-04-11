@@ -5,7 +5,7 @@ from .models import Equipment, Building, IP, History
 from django.db.models import Q
 import csv
 from django.http import HttpResponse
-from .models import EquipmentForm
+from .forms import EquipmentForm
 
 
 # Create your views here.
