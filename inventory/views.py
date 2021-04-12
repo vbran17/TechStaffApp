@@ -3,6 +3,8 @@ from django.contrib.auth.models import Permission, User
 from django.contrib.auth import authenticate, login, logout
 from .models import *
 from django.db.models import Q
+from django.contrib.auth.models import User
+
 import csv
 from django.http import HttpResponse, JsonResponse
 from .forms import EquipmentForm
@@ -39,17 +41,21 @@ def logout_view(request):
     logout(request)
     # redirect to a success page.
 
+def admin_view(request):
+    context={ }
+    context["Users"] = User.objects.all()
+    return render(request, 'inventory/admin.html', context)
 
 def ipdash_view(request):
     return render(request, 'inventory/ip-dashboard.html')
 
 def itemdetails_view(request, item_id):
-    #run a query to get all the info for the item_id 
+    #run a query to get all the info for the item_id
     id_item = int(item_id)
     temp = 'This is the ID %i' % (id_item)
     print(temp)
 
-    item_list = Equipment.objects.filter(id=id_item) 
+    item_list = Equipment.objects.filter(id=id_item)
     # if len(item_list) == 0:
     item = item_list[0]
         # print(item)
@@ -57,27 +63,27 @@ def itemdetails_view(request, item_id):
     history = History.objects.filter(executor=executore)
     print(history)
     return render(request, 'inventory/itemdetails.html', {'item': item, 'history': history})
- 
+
 def dns_view(request):
     items = Equipment.objects.all()
     size = len(items)
     results = 'Search returned %i items(s)' % (size)
     value = 0
-    
-    response = HttpResponse(content_type='text/csv')  
-    response['Content-Disposition'] = 'attachment; filename="dns.csv"'  
-    writer = csv.writer(response)  
-    writer.writerow([results])  
-    writer.writerow(['CS Tag', 'Custodian', 'Hostname', 'Location', 'Manufacturer-Model', 'VT Tag'])  
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="dns.csv"'
+    writer = csv.writer(response)
+    writer.writerow([results])
+    writer.writerow(['CS Tag', 'Custodian', 'Hostname', 'Location', 'Manufacturer-Model', 'VT Tag'])
     for i in items:
         value = value + int(i.pvalue)
-        writer.writerow([i.cstag, i.custodian, i.hostname, i.building.name, i.manufacturer_model, i.vttag])  
+        writer.writerow([i.cstag, i.custodian, i.hostname, i.building.name, i.manufacturer_model, i.vttag])
     total = 'Total value: $%i' % (value)
     print(results)
     print(total)
-    
+
     writer.writerow([total])
-    return response  
+    return response
 
 def addequipment_view(request):
     form = EquipmentForm(request.POST or None)
@@ -106,42 +112,42 @@ def get_equipment_queryset(query=None, filter=None):
         if filter == 'vttag':
             for q in queries:
                 equipments = Equipment.objects.filter(Q(vttag__icontains=q)).distinct()
-                for equipment in equipments: 
+                for equipment in equipments:
                     queryset.append(equipment)
         elif filter == 'cstag':
             for q in queries:
                 equipments = Equipment.objects.filter(Q(cstag__icontains=q)).distinct()
-                for equipment in equipments: 
+                for equipment in equipments:
                     queryset.append(equipment)
         elif filter == 'serial_number':
             for q in queries:
                 equipments = Equipment.objects.filter(Q(serial_number__icontains=q)).distinct()
-                for equipment in equipments: 
+                for equipment in equipments:
                     queryset.append(equipment)
         elif filter == 'manufacturer_model':
             for q in queries:
                 equipments = Equipment.objects.filter(Q(manufacturer_model__icontains=q)).distinct()
-                for equipment in equipments: 
+                for equipment in equipments:
                     queryset.append(equipment)
-        elif filter == 'custodian': 
+        elif filter == 'custodian':
             for q in queries:
                 equipments = Equipment.objects.filter(Q(custodian__icontains=q)).distinct()
-                for equipment in equipments: 
+                for equipment in equipments:
                     queryset.append(equipment)
         elif filter == 'hostname':
             for q in queries:
                 equipments = Equipment.objects.filter(Q(hostname__icontains=q)).distinct()
-                for equipment in equipments: 
+                for equipment in equipments:
                     queryset.append(equipment)
         elif filter == 'building':
             for q in queries:
                 equipments = Equipment.objects.filter(Q(building__icontains=q)).distinct()
-                for equipment in equipments: 
+                for equipment in equipments:
                     queryset.append(equipment)
         elif filter == 'ip':
             for q in queries:
                 equipments = Equipment.objects.filter(Q(ip__icontains=q)).distinct()
-                for equipment in equipments: 
+                for equipment in equipments:
                     queryset.append(equipment)
         else:
             for q in queries:
@@ -155,7 +161,7 @@ def get_equipment_queryset(query=None, filter=None):
                     Q(building__icontains=q) |
                     Q(ip__icontains=q)
                 ).distinct()
-                for equipment in equipments: 
+                for equipment in equipments:
                     queryset.append(equipment)
         return list(set(queryset))
     else:
