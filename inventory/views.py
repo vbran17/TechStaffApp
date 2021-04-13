@@ -41,7 +41,11 @@ def logout_view(request):
 
 
 def ipdash_view(request):
-    return render(request, 'inventory/ip-dashboard.html')
+    building_objects = Building.objects.all()
+    context = {
+        'building_objects' : building_objects
+    }
+    return render(request, 'inventory/ip-dashboard.html', context)
 
 def itemdetails_view(request, item_id):
     #run a query to get all the info for the item_id 
