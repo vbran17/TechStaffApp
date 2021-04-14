@@ -1,43 +1,91 @@
-{% extends 'base.html' %} 
-{% block content %}
-{% load static %}
+{% extends 'base.html' %} {% block content %} {% load static %}
 <link rel="stylesheet" href="{% static 'css/addequipment.css' %}" />
 <link
-    href="https://www.cssscript.com/demo/sticky.css"
-    rel="stylesheet"
-    type="text/css"
+  href="https://www.cssscript.com/demo/sticky.css"
+  rel="stylesheet"
+  type="text/css"
 />
 <!-- Title -->
-<h2 class="d-flex justify-content-center align-items-center" style="font-size: 40pt;">Add Equipment</h2>
-<form method="POST" style="padding:60px;">
-    {% csrf_token %}
-    <table class="table table-responsive">
-        <thead>
-            <tr>
-                <th id="title" colspan="2" style="text-align: center; font-size: xx-large;">Details</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{ form.as_table }}
-        </tbody>
-    </table>
-    <div style="text-align: center;">
-        <input type="submit" value="Submit" class="btn btn-outline-secondary" />
-        <a href="/home/"><button id="right-btn" class="btn btn-outline-secondary" type="button">Cancel</button></a>
-    </div>
+<h2
+  class="d-flex justify-content-center align-items-center"
+  style="font-size: 40pt"
+>
+  Add Equipment
+</h2>
+<form method="POST" style="padding: 60px">
+  {% csrf_token %}
+  <table class="table table-responsive">
+    <thead>
+      <tr>
+        <th
+          id="title"
+          colspan="2"
+          style="text-align: center; font-size: xx-large"
+        >
+          Details
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for field in form.visible_fields %}
+      <tr>
+        <td>{{field.label_tag}}</td>
+        <td>{{field}}</td>
+      </tr>
+      {% if field.name == 'hostname' %}
+      <tr>
+        <td><label>IPv4:</label></td>
+        <td><input id="id_ipv4" class="form-control" type="text" readonly></input></td>
+      </tr>
+      <tr>
+        <td>IPv6:</td>
+        <td><input id="id_ipv6" class="form-control" type="text" readonly></input></td>
+      </tr>
+      {% endif %} {% endfor %}
+    </tbody>
+  </table>
+  <div style="text-align: center">
+    <input type="submit" value="Submit" class="btn btn-outline-secondary" />
+    <a href="/home/"
+      ><button id="right-btn" class="btn btn-outline-secondary" type="button">
+        Cancel
+      </button></a
+    >
+  </div>
 </form>
 
 <script>
-    let d = new Date();
-    document.getElementById("date").innerHTML = d;
-    $(function() {
-        $( ".datepicker" ).datepicker({
-        changeMonth: true,
-        changeYear: true,
-        yearRange: "1900:2050",
-        // You can put more options here.
+
+  document.getElementById("id_hostname").disabled = true;
+  buildingSelect = document.getElementById("id_building");
+  buildingSelect.addEventListener("change", function () {
+    console.log(this.value);
+    if (this.value != "") {
+      document.getElementById("id_hostname").disabled = false;
+    } else {
+      document.getElementById("id_hostname").disabled = true;
+    }
+    document.getElementById("id_hostname").value = "";
+    document.getElementById("id_ipv4").value = "";
+    document.getElementById("id_ipv4").value = "";
+  });
+
+  hostnameSelect = document.getElementById("id_hostname");
+  hostnameSelect.addEventListener("change", function () {
+    if (this.value != "") {
+      fetch('/addequipment')
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(data) {
+          console.log(data);
         });
-    });
+    }
+    else {
+      document.getElementById("id_ipv4").value = "";
+      document.getElementById("id_ipv4").value = "";
+    }
+  });
 </script>
 
 {% endblock %}
