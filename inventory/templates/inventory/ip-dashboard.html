@@ -9,7 +9,7 @@
 <!-- <<label for=""></label> -->
   <div class="row">
     <form class="d-flex" method="get" >
-      <div class="input-group" style="width: 300px; padding-right: 10px;">
+      <div class="input-group" style="width: 100%; max-width: 300px; padding-right: 10px;">
         {% csrf_token %}
           <div class="input-group-prepend">
             <label class="input-group-text" for="inputGroupSelect01">Building</label>
@@ -24,7 +24,7 @@
             {% endfor %}
           </select>
       </div>
-      <div class="input-group" style="width: 300px;">
+      <div class="input-group" style="width: 100%; max-width: 300px;">
           <div class="input-group-prepend">
             <label class="input-group-text" for="inputGroupSelect01">Views</label>
           </div>
@@ -43,9 +43,9 @@
     </form>
   </div>
 
-<nav class="navbar top-navbar navbar-light bg-light px-9">
-  <div class="row">
-    <div class="input-group" style="width: 750px;">
+<nav class="navbar top-navbar navbar-light bg-light px-9 justify-content-center">
+  <div class="row" style="flex-grow: 2; padding-right: 10px">
+    <div class="input-group">
       <input id="searchField" type="text" class="form-control" aria-label="Search" />
       <button class="btn btn-outline-secondary" type="button">
         <i class="bi bi-search"></i>
@@ -53,16 +53,94 @@
     </div>
   </div>
   <div class="submit-row" style="padding-right: 10px;">
-    <a href=""><button id="left-btn" class="btn btn-outline-secondary" type="button" style="width: 175px;">Add Hostname</button></a>
-    <a href=""><button id="left-btn" class="btn btn-outline-secondary" type="button" style="width: 175px;">Add IPs</button></a>
+    <button id="officeButton" class="btn btn-outline-secondary" type="button" style="width: 150px;">Add Office</button>
+    <button id="hostnameButton" class="btn btn-outline-secondary" type="button" style="width: 150px;">Add Hostname</button>
+    <button id="addIPsButton" class="btn btn-outline-secondary" type="button" style="width: 150px;">Add IPs</button>
   </div>
 </nav>
+
+
+
+<!--- Popup Menus for adding an office, hostname, ip range and static load of javascript file (see below)-->
+<!-- Office Adding -->
+<div id="office-divider" class="bg-light" style="margin: 10px 0px;">
+  <form method="POST" style="padding:20px;">
+      {% csrf_token %}
+      <table class="table table-responsive">
+          <thead>
+              <tr>
+                  <th id="title" colspan="2" style="text-align: center; font-size: xx-large;">Add Office</th>
+              </tr>
+          </thead>
+          <tbody>
+              {{ form.as_table }}
+          </tbody>
+      </table>
+      <div style="text-align: center;">
+          <input type="submit" value="Submit" class="btn btn-outline-secondary" />
+          <button id="cancelOffice" class="btn btn-outline-secondary" type="button">Cancel</button>
+      </div>
+  </form>
+</div>
+
+<!-- Hostname Adding -->
+<div id="hostname-divider" class="bg-light" style="margin: 10px 0px;">
+  <form method="POST" style="padding:20px;">
+      {% csrf_token %}
+      <table class="table table-responsive">
+          <thead>
+              <tr>
+                  <th id="title" colspan="2" style="text-align: center; font-size: xx-large;">Add Hostname</th>
+              </tr>
+          </thead>
+          <tbody>
+              {{ form.as_table }}
+          </tbody>
+      </table>
+      <div style="text-align: center;">
+          <input type="submit" value="Submit" class="btn btn-outline-secondary" />
+          <button id="cancelHost" class="btn btn-outline-secondary" type="button">Cancel</button>
+      </div>
+  </form>
+</div>
+
+<!-- IP Range Adding -->
+<div id="addIPs-divider" class="bg-light" style="margin: 10px 0px;">
+  <form method="POST" style="padding:20px;">
+      {% csrf_token %}
+      <table class="table table-responsive">
+          <thead>
+              <tr>
+                  <th id="title" colspan="2" style="text-align: center; font-size: xx-large;">Add IP Range</th>
+              </tr>
+          </thead>
+          <tbody>
+              {{ form.as_table }}
+          </tbody>
+      </table>
+      <div style="text-align: center;">
+          <input type="submit" value="Submit" class="btn btn-outline-secondary" />
+          <button id="cancelIPs" class="btn btn-outline-secondary" type="button">Cancel</button>
+      </div>
+  </form>
+</div>
+
+<!-- JavaScript Magic for Popup Menus-->
+<script src="{% static 'js/popupMenusIPDashboard.js' %}">
+</script>
+
+
+
+
+
+
+
 <nav class="navbar top-navbar navbar-light bg-light px-9">
   <div class="row">
     <label for="filler">Select a building to view IPs</label>
   </div>
 </nav>
-<!--- Display Area for IP Addresses --->
+<!--- Display Area for IP Addresses -->
 
 </div>
 {% endblock %}
