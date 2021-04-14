@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import Permission, User
 from django.contrib.auth import authenticate, login, logout
-from .models import Equipment, Building, IP, History
+from .models import *
 from django.db.models import Q
 import csv
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .forms import EquipmentForm
 
 
@@ -81,6 +81,11 @@ def dns_view(request):
 
 def addequipment_view(request):
     form = EquipmentForm(request.POST or None)
+    '''
+    if request.method == "GET":
+        print(form.cleaned_data["hostname"])
+        return JsonResponse({"abc": 123})
+    '''
     if form.is_valid():
         form.save()
     return render(request, 'inventory/addequipment.html', {'form':form})
