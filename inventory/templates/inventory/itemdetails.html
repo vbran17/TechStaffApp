@@ -21,7 +21,7 @@
             <tbody>
                 <tr>
                     <th>CS Tag</th>
-                    <td contenteditable="true">{{ item.cstag }}</td>
+                    <td contenteditable="true">{{ item.cs_tag }}</td>
                 </tr>
                 <tr>
                     <th>Custodian</th>
@@ -29,31 +29,35 @@
                 </tr>
                 <tr>
                     <th>Hostname</th>
-                    <td contenteditable="true">{{ item.hostname }}</td>
+                    <td contenteditable="true">{{ item.hostname.hostname }}</td>
                 </tr>
                 <tr>
                     <th>Location</th>
                     <td contenteditable="true">{{ item.building.name }}</td>
                 </tr>
                 <tr>
-                    <th>Manufacturer</th>
-                    <td contenteditable="true">{{ item.manufacturer_model }}</td>
-                </tr>
-                <tr>
-                    <th>Model</th>
+                    <th>Manufacturer/Model</th>
                     <td contenteditable="true">{{ item.manufacturer_model }}</td>
                 </tr>
                 <tr>
                     <th>VT Tag</th>
-                    <td contenteditable="true">{{ item.vttag }}</td>
+                    <td contenteditable="true">{{ item.vt_tag }}</td>
                 </tr>
                 <tr>
                     <th>IPv4</th>
-                    <td contenteditable="true">{{ item.ip.address }}</td>
+                    <td contenteditable="true">{{ item.hostname.ipv4.address }} &nbsp; &nbsp; &nbsp;<a href=""><button id="ipv4-btn" class="btn btn-outline-secondary" type="button">
+                        Generate IPv4
+                    </button></a></td>
                 </tr>
                 <tr>
                     <th>IPv6</th>
-                    <td contenteditable="true">{{ item.building.ipv6_prefix }}</th>
+                    <td contenteditable="true">{{ item.hostname.ipv6.address }} &nbsp; &nbsp; &nbsp;<a href=""><button id="ipv6-btn" class="btn btn-outline-secondary" type="button">
+                        Generate IPv6
+                    </button></a></td>
+                </tr>
+                <tr>
+                    <th>Notes</th>
+                    <td contenteditable="true">{{ item.notes }}</th>
                 </tr>
             </tbody>
         </table>
@@ -79,9 +83,11 @@
 </div> 
 <div id="rows" class="row" style="padding: 5%;">
     <div class="col"> 
-        
+        <a href=""><button id="assign-btn" class="btn btn-outline-secondary" type="button">
+            Assign To
+        </button></a>
     
-        <a href="/home/"><button id="right-btn" class="btn btn-outline-secondary" type="button">
+        <a href="delete/"><button id="right-btn" class="btn btn-outline-secondary" type="button">
             Delete Item
         </button></a>
     </div>

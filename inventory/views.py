@@ -126,10 +126,14 @@ def itemdetails_view(request, item_id):
     item = item_list[0]
     # print(item)
     executore = "carnold@vt.edu"
-    history = History.objects.filter(executor=executore)
+    history = History.objects.filter(equipment=id_item)
     print(history)
     return render(request, 'inventory/itemdetails.html', {'item': item, 'history': history})
-
+ 
+def item_delete(request, item_id):
+    
+    return home_view(request)
+    
 
 def dns_view(request):
     items = Equipment.objects.all()

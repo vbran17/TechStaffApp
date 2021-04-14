@@ -14,6 +14,7 @@ urlpatterns = [
     path('ipdashboard_filters/', views.IPListing.as_view(), name='ipdashboardfilter'),
     path('ajax/buildings/', views.getBuilding, name = 'get_building'),
     path('itemdetails/<int:item_id>/', views.itemdetails_view, name='itemdetails'),
+    path('itemdetails/<int:item_id>/delete/', views.item_delete, name='item_delete'),
     path('addequipment/', views.addequipment_view, name='addequipment'),
     path('homeuseform/', views.homeuseform_view, name='homeuseform'),
     path('networkform/', views.networkform_view, name='networkform'),
