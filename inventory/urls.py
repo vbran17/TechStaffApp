@@ -19,4 +19,9 @@ urlpatterns = [
     path('homeuseform/', views.homeuseform_view, name='homeuseform'),
     path('networkform/', views.networkform_view, name='networkform'),
     path('searchqueryform/', views.searchqueryform_view, name='searchqueryform'),
+<<<<<<< HEAD
 ]
+=======
+    path('IPv4/<int:b_name>/<int:item_id>', views.gen_ipv4, name='ipv4'),
+]
+>>>>>>> branch commit

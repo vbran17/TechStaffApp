@@ -10,6 +10,7 @@
     <!-- Title -->
     <h2 class="d-flex justify-content-center align-items-center" style="padding: 10px; font-size: 40pt; padding-bottom: 50px;">Equipment Page</h2>
 {% if item is not None %}
+<form method="POST">
 <div class="row" style="width: 100%;">
     <div class="column">
         <table class="table table-responsive">
@@ -45,9 +46,9 @@
                 </tr>
                 <tr>
                     <th>IPv4</th>
-                    <td contenteditable="true">{{ item.hostname.ipv4.address }} &nbsp; &nbsp; &nbsp;<a href=""><button id="ipv4-btn" class="btn btn-outline-secondary" type="button">
+                    <td contenteditable="true">{{ item.hostname.ipv4.address }} &nbsp; &nbsp; &nbsp;</td><a href="/IPv4/{{item.building.id}}/{{item.id}}"><button id="ipv4-btn" class="btn btn-outline-secondary" type="button">
                         Generate IPv4
-                    </button></a></td>
+                    </button></a>
                 </tr>
                 <tr>
                     <th>IPv6</th>
@@ -86,11 +87,17 @@
         <a href=""><button id="assign-btn" class="btn btn-outline-secondary" type="button">
             Assign To
         </button></a>
-    
+
         <a href="delete/"><button id="right-btn" class="btn btn-outline-secondary" type="button">
             Delete Item
         </button></a>
+
+        &nbsp;&nbsp;&nbsp;
+        <a href=""><button id="confirm-btn" class="btn btn-outline-secondary" type="button">
+            Apply Changes
+        </button></a>
     </div>
 </div>
+</form>
 {% endif %}
 {% endblock %}

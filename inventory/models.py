@@ -58,7 +58,7 @@ class Checkout(models.Model):
 
 class History(models.Model):
     command = models.CharField(max_length=255, blank=True)
-    execution_time = models.TimeField(blank=True)
+    execution_time = models.TimeField(auto_now_add=True, blank=True)
     executor = models.EmailField(max_length=255, blank=True) 
     equipment = models.ForeignKey(Equipment, on_delete=models.RESTRICT, blank=True)
     

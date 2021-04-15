@@ -45,6 +45,40 @@ def logout_view(request):
     logout(request)
     # redirect to a success page.
 
+def gen_ipv4(request, b_name, item_id):
+    ipv4 = IP.objects.filter(building=b_name,in_use=False, ip_type='I4')
+    if len(ipv4) > 0:
+        freeIP = ipv4[0]
+        print(freeIP.address)
+        freeIP.in_use = True
+        print(freeIP.in_use)
+        # map it to the equipment 
+        equip = Equipment.objects.get(id=item_id)
+        print(equip.hostname.id)
+        if equip.hostname.ipv4:
+            print("IP type")
+            print(equip.hostname.ipv4.ip_type)
+            equip.hostname.ipv4 = freeIP
+            #equip.hostname.ipv4.address = freeIP.address
+            equip.hostname.ipv4.save()
+            print("not null")
+        else:
+            equip.hostname.ipv4 = freeIP
+            equip.save()
+        print(equip.hostname.ipv4.address)
+        # update history
+        newCommand = History()
+        newCommand.command = "IPv4 created"
+        executor = '%s@vt.edu' % equip.custodian
+        print(executor)
+        newCommand.executor = executor
+        newCommand.equipment = equip
+        newCommand.save()
+    else:
+        print("No free IP found")
+    
+    # change the in_use form
+    return redirect('/itemdetails/%i/' % item_id)
 
 def admin_view(request):
     context = {}
@@ -131,9 +165,12 @@ def itemdetails_view(request, item_id):
     return render(request, 'inventory/itemdetails.html', {'item': item, 'history': history})
  
 def item_delete(request, item_id):
-    
-    return home_view(request)
-    
+    print(request.path)
+    request.path = "/home/"
+    request.path_info = "/home/"
+    print(request.path_info)
+    return redirect('/home/')
+
 
 def dns_view(request):
     items = Equipment.objects.all()
