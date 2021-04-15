@@ -4,10 +4,13 @@ from django.contrib.auth import authenticate, login, logout
 from .models import *
 from django.db.models import Q
 from django.contrib.auth.models import User
-
+from rest_framework.generics import ListAPIView
+from .serializers import IPSerializers
 import csv
 from django.http import HttpResponse, JsonResponse
 from .forms import EquipmentForm
+from django.core import serializers
+
 
 
 # Create your views here.
@@ -48,8 +51,45 @@ def admin_view(request):
 
 def ipdash_view(request):
     building_objects = Building.objects.all()
+    IP_objects = IP.objects.all()
     context = {
-        'building_objects' : building_objects
+        'building_objects' : building_objects,
+        'IPs' : IP_objects
+    }
+    return render(request, 'inventory/ip-dashboard.html', context)
+
+class IPListing(ListAPIView):
+    serializer_class = IPSerializers
+
+    def get_queryset(self):
+        ip_list = IP.objects.all()
+        building = self.request.query_params.get('building', None)
+        in_use = self.request.query_params.get('in_use', None)
+        if building:
+            ip_list = ip_list.filter(building__name = building)
+        if in_use:
+            ip_list = ip_list.filter(in_use = in_use)
+        return ip_list
+
+def IPDash(request):
+	return render(request, "inventory/ip-dashboard.html", {})
+
+def getBuilding(request):
+    print("in building method")
+    if request.method == "GET" and request.is_ajax():
+        buildings = Building.objects.all().values_list('name').distinct()
+        buildings = [i[0] for i in list(buildings)]
+        data = {
+            "buildings": buildings, 
+        }
+        return JsonResponse(data, status=200)
+
+def ipdash_view_filter(request):
+    building_objects = Building.objects.all()
+    IP_objects = IP.objects.all()
+    context = {
+        'building_objects' : building_objects,
+        'IPs' : IP_objects
     }
     return render(request, 'inventory/ip-dashboard.html', context)
 
