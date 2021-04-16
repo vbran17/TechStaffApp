@@ -99,6 +99,7 @@ def gen_ipv4(request, b_name, item_id):
             equip.hostname.ipv4 = freeIP
             #equip.hostname.ipv4.address = freeIP.address
             equip.hostname.ipv4.save()
+            equip.hostname.save()
             print("not null")
         else:
             equip.hostname.ipv4 = freeIP
