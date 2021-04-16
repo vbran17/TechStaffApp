@@ -45,6 +45,42 @@ def logout_view(request):
     logout(request)
     # redirect to a success page.
 
+def gen_ipv6(request, b_name, item_id):
+    building = Building.objects.filter(id=b_name)
+    if len(building) == 0:
+        messages.info(request, "No Building prefix found")
+    else:
+        ipv6 = IP()
+        ipv6.building = building[0]
+        ipv6.ip_type = "I6"
+        ipv6.in_use = True
+        address = building[0].ipv6_prefix + "1111:1111:1113"
+        print(address)
+        ipv6.address = address
+        ipv6.save()
+        equip = Equipment.objects.get(id=item_id)
+        if equip.hostname:
+            print("Hostname specified %s" % equip.hostname.hostname)
+            print(equip.hostname.ipv6.address)
+            equip.hostname.ipv6 = ipv6 
+            #equip.hostname.ipv6.save()
+            equip.hostname.save()
+            print(equip.hostname.ipv6.address)
+            # create new command stamp
+            newCommand = History()
+            newCommand.command = "IPv6 created"
+            executor = '%s@vt.edu' % equip.custodian
+            print(executor)
+            newCommand.executor = executor
+            newCommand.equipment = equip
+            newCommand.save()
+        else:
+            print("No hostname specified")
+            messages.info(request, "No hostname specified")
+    print("Ypu are in IPv6")
+    
+    return redirect('/itemdetails/%i/' % item_id)
+
 def gen_ipv4(request, b_name, item_id):
     ipv4 = IP.objects.filter(building=b_name,in_use=False, ip_type='I4')
     if len(ipv4) > 0:
@@ -58,6 +94,8 @@ def gen_ipv4(request, b_name, item_id):
         if equip.hostname.ipv4:
             print("IP type")
             print(equip.hostname.ipv4.ip_type)
+            # free current ip, set in_use to false
+            equip.hostname.ipv4.in_use = False
             equip.hostname.ipv4 = freeIP
             #equip.hostname.ipv4.address = freeIP.address
             equip.hostname.ipv4.save()

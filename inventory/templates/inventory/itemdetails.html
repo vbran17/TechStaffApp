@@ -9,6 +9,14 @@
 />
     <!-- Title -->
     <h2 class="d-flex justify-content-center align-items-center" style="padding: 10px; font-size: 40pt; padding-bottom: 50px;">Equipment Page</h2>
+
+{% if messages %}
+    {% for message in messages %}
+    <script>alert("{{ message }}")</script>
+
+    {% endfor %}
+
+{% endif %}
 {% if item is not None %}
 <form method="POST">
 <div class="row" style="width: 100%;">
@@ -22,19 +30,19 @@
             <tbody>
                 <tr>
                     <th>CS Tag</th>
-                    <td contenteditable="true">{{ item.cs_tag }}</td>
+                    <td contenteditable="true" name="cstag">{{ item.cs_tag }}</td>
                 </tr>
                 <tr>
                     <th>Custodian</th>
-                    <td contenteditable="true">{{ item.custodian }}</td>
+                    <td contenteditable="true" name="custodian">{{ item.custodian }}</td>
                 </tr>
                 <tr>
                     <th>Hostname</th>
-                    <td contenteditable="true">{{ item.hostname.hostname }}</td>
+                    <td contenteditable="true" name="hostname">{{ item.hostname.hostname }}</td>
                 </tr>
                 <tr>
                     <th>Location</th>
-                    <td contenteditable="true">{{ item.building.name }}</td>
+                    <td>{{ item.building.name }}</td>
                 </tr>
                 <tr>
                     <th>Manufacturer/Model</th>
@@ -42,23 +50,23 @@
                 </tr>
                 <tr>
                     <th>VT Tag</th>
-                    <td contenteditable="true">{{ item.vt_tag }}</td>
+                    <td contenteditable="true" name="vttag">{{ item.vt_tag }}</td>
                 </tr>
                 <tr>
                     <th>IPv4</th>
-                    <td contenteditable="true">{{ item.hostname.ipv4.address }} &nbsp; &nbsp; &nbsp;</td><a href="/IPv4/{{item.building.id}}/{{item.id}}"><button id="ipv4-btn" class="btn btn-outline-secondary" type="button">
+                    <td>{{ item.hostname.ipv4.address }} &nbsp; &nbsp; &nbsp;<a href="/IPv4/{{item.building.id}}/{{item.id}}"><button id="ipv4-btn" class="btn btn-outline-secondary" type="button">
                         Generate IPv4
-                    </button></a>
+                    </button></a></td>
                 </tr>
                 <tr>
                     <th>IPv6</th>
-                    <td contenteditable="true">{{ item.hostname.ipv6.address }} &nbsp; &nbsp; &nbsp;<a href=""><button id="ipv6-btn" class="btn btn-outline-secondary" type="button">
+                    <td>{{ item.hostname.ipv6.address }} &nbsp; &nbsp; &nbsp;<a href="/IPv6/{{item.building.id}}/{{item.id}}"><button id="ipv6-btn" class="btn btn-outline-secondary" type="button">
                         Generate IPv6
                     </button></a></td>
                 </tr>
                 <tr>
                     <th>Notes</th>
-                    <td contenteditable="true">{{ item.notes }}</th>
+                    <td contenteditable="true" name="notes">{{ item.notes }}</th>
                 </tr>
             </tbody>
         </table>

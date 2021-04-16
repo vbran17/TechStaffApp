@@ -22,7 +22,7 @@ class IP(models.Model):
     building = models.ForeignKey(Building, on_delete=models.RESTRICT, blank=True)
     ip_type = models.CharField(choices=ip_types, max_length=2, default=IPv4)
     address = models.CharField(max_length=40, blank=True)
-    date = models.DateField(blank=True)
+    date = models.DateField(auto_now_add=True, blank=True)
     in_use = models.BooleanField()
 
 class Hostname(models.Model):
