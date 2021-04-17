@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Equipment
+from .models import Equipment, Building, Hostname
+
 
 class EquipmentForm(ModelForm):
     class Meta:
@@ -15,6 +16,24 @@ class EquipmentForm(ModelForm):
                     'notes': forms.Textarea(attrs={'cols': 40, 'rows': 3}), 
                     'description': forms.Textarea(attrs={'cols': 40, 'rows': 3}), 
                     'pdate': forms.DateInput(attrs={'data-target': '.datepicker'})}
+
+
+class BuildingForm(ModelForm):
+    class Meta:
+        model = Building
+        fields = ['name', 'ipv6_prefix']
+
+
+class HostnameForm(ModelForm):
+    class Meta:
+        model = Hostname
+        fields = ['hostname', 'ipv4', 'ipv6', 'aliases']
+
+#for IP Form?
+class IPRangeForm(forms.Form):
+    ip_range = forms.CharField(label='IP Range', max_length=256)
+
+
 
 
         

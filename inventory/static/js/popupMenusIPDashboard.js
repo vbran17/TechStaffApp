@@ -3,6 +3,8 @@ document.getElementById("office-divider").style.display ="none";
 
 function openOffice() {
     document.getElementById("office-divider").style.display = "block";
+    document.getElementById("addIPs-divider").style.display = "none";
+    document.getElementById("hostname-divider").style.display = "none";
 }
 
 function closeOffice() {
@@ -19,6 +21,9 @@ document.getElementById("hostname-divider").style.display ="none";
 
 function openHostname() {
     document.getElementById("hostname-divider").style.display = "block";
+
+    document.getElementById("addIPs-divider").style.display = "none";
+    document.getElementById("office-divider").style.display = "none";
 }
 
 function closeHostname() {
@@ -35,6 +40,8 @@ document.getElementById("addIPs-divider").style.display ="none";
 
 function openIPs() {
     document.getElementById("addIPs-divider").style.display = "block";
+    document.getElementById("hostname-divider").style.display = "none";
+    document.getElementById("office-divider").style.display = "none";
 }
 
 function closeIPs() {
