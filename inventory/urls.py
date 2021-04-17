@@ -20,4 +20,10 @@ urlpatterns = [
     path('networkform/', views.networkform_view, name='networkform'),
     path('searchqueryform/', views.searchqueryform_view, name='searchqueryform'),
     path('IPv4/<int:b_name>/<int:item_id>', views.gen_ipv4, name='ipv4'),
+<<<<<<< HEAD
 ]
+=======
+    path('IPv6/<int:b_name>/<int:item_id>', views.gen_ipv6, name='ipv6'),
+    path('itemdetails/<int:item_id>/apply_changes/', views.apply_changes, name='apply_changes'),
+]
+>>>>>>> Got edit capabilites to work

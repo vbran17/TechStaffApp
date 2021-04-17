@@ -1,7 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import Permission, User
 from django.contrib.auth import authenticate, login, logout
+<<<<<<< HEAD
 from .models import *
+=======
+from .models import Equipment, Building, IP, History, Hostname
+>>>>>>> Got edit capabilites to work
 from django.db.models import Q
 from django.contrib.auth.models import User
 from rest_framework.generics import ListAPIView
@@ -80,7 +84,64 @@ def gen_ipv6(request, b_name, item_id):
     print("Ypu are in IPv6")
     
     return redirect('/itemdetails/%i/' % item_id)
-
+def apply_changes(request, item_id):
+    equip = Equipment.objects.get(id=item_id)
+    CSTag = request.POST.get('cstag','').strip()
+    Notes = request.POST.get('notes','').strip()
+    VTTag = request.POST.get('vttag','').strip()
+    Description = request.POST.get('desc','').strip()
+    HostedName = request.POST.get('host', '').strip()
+    Alias = request.POST.get('alias', '').strip()
+    if equip:
+        equip.notes = Notes
+        equip.cs_tag = CSTag
+        equip.vt_tag = VTTag
+        equip.description = Description
+        equip.save()
+        print('New Notes: ')
+        print(Notes)
+        print('CSTag is: ')
+        print(CSTag)
+        print('VTTag is: ')
+        print(VTTag)
+        print('New description is: ')
+        print(VTTag)
+        host = Hostname.objects.filter(hostname=HostedName, building=equip.building, in_use=False)
+        if len(host) > 0:
+            print(host[0].building.name)
+            if equip.hostname:
+                if equip.hostname != host[0]:
+                    equip.hostname.in_use = False
+                    equip.hostname = host[0]
+                    equip.hostname.save()
+                    messages.success(request, "Hostname Reassigned!")
+                else:
+                    messages.success(request, "Hostname currently in use")
+            else:
+                equip.hostname = host[0]
+                equip.hostname.in_use = True
+                equip.hostname.save()
+                messages.success(request, "Hostname Assigned!")
+        else:
+            # Needs to have a hostname created in the hostname for this to work properly
+            if equip.hostname.hostname == HostedName:
+                # messages.info(request, "Hostname in use")
+                print("Lol")
+            else:
+                messages.info(request, "Hostname not found under building %s or it is being used" % equip.building.name)
+        if equip.hostname:
+            if equip.hostname.aliases != Alias:
+                equip.hostname.aliases = Alias
+                equip.hostname.save()
+                messages.info(request, "Alias Added!")
+            else: 
+                print("Lol")
+        else:
+            messages.info(request, "Cannot assign aliases to empty hostname!")
+    else:
+        messages.info(request, "Equipment not found")
+        print("Equpiment not found")
+    return redirect('/itemdetails/%i/' % item_id)
 def gen_ipv4(request, b_name, item_id):
     ipv4 = IP.objects.filter(building=b_name,in_use=False, ip_type='I4')
     if len(ipv4) > 0:
@@ -114,6 +175,7 @@ def gen_ipv4(request, b_name, item_id):
         newCommand.equipment = equip
         newCommand.save()
     else:
+        messages.info(request, "No Free IP found for building range")
         print("No free IP found")
     
     # change the in_use form
@@ -216,6 +278,7 @@ def dns_view(request):
     size = len(items)
     results = 'Search returned %i items(s)' % (size)
     value = 0
+<<<<<<< HEAD
 
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="dns.csv"'
@@ -234,6 +297,24 @@ def dns_view(request):
     writer.writerow([total])
     return response
 
+=======
+    
+    response = HttpResponse(content_type='text/csv')  
+    response['Content-Disposition'] = 'attachment; filename="dns.csv"'  
+    writer = csv.writer(response)  
+    #writer.writerow([results])  
+    writer.writerow(['NAME', 'IP_ADDRESS', 'MAILXCHANGE', 'ALIAS', 'COMMENT'])  
+    for i in items:
+        value = value + int(i.purchase_value)
+        ip = i.hostname.ipv4.address + ',' + i.hostname.ipv6.address
+        writer.writerow([i.hostname.hostname, ip, i.mail_exchange, i.hostname.aliases, i.notes])  
+    total = 'Total value: $%i' % (value)
+    print(results)
+    print(total)
+    
+    #writer.writerow([total])
+    return response  
+>>>>>>> Got edit capabilites to work
 
 def addequipment_view(request):
     form = EquipmentForm(request.POST or None)

@@ -48,13 +48,15 @@ class Equipment(models.Model):
     hostname = models.ForeignKey(Hostname, on_delete=models.RESTRICT, blank=True)
     dept = models.CharField(max_length=10, blank=True)
     status = models.CharField(max_length=128, blank=True)
+    mail_exchange = models.SmallIntegerField(blank=True)
+    #have to change mail exchange to hostname 
     cs_tag = models.CharField(max_length=255, blank=True)
     notes = models.CharField(max_length=10000, blank=True)
 
 class Checkout(models.Model):
     contact = models.ForeignKey(PersonalID, on_delete=models.RESTRICT, blank=True)
     equipment = models.ForeignKey(Equipment, on_delete=models.RESTRICT, blank=True)
-    checkoutdate = models.DateField(blank=True)
+    checkoutdate = models.DateField(blank=True, auto_now_add=True)
 
 class History(models.Model):
     command = models.CharField(max_length=255, blank=True)

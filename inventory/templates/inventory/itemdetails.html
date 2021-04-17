@@ -18,7 +18,8 @@
 
 {% endif %}
 {% if item is not None %}
-<form method="POST">
+<form method="POST" action="/itemdetails/{{item.id}}/apply_changes/">
+    {% csrf_token %}
 <div class="row" style="width: 100%;">
     <div class="column">
         <table class="table table-responsive">
@@ -30,7 +31,9 @@
             <tbody>
                 <tr>
                     <th>CS Tag</th>
-                    <td contenteditable="true" name="cstag">{{ item.cs_tag }}</td>
+                    <td><input name="cstag" type="text" placeholder="CS Tag goes here" class="form-control" value="{{ item.cs_tag }}"></td>
+                    
+                    <!--<td contenteditable="true" name="cstag">{{ item.cs_tag }}</td> -->
                 </tr>
                 <tr>
                     <th>Custodian</th>
@@ -38,7 +41,13 @@
                 </tr>
                 <tr>
                     <th>Hostname</th>
-                    <td contenteditable="true" name="hostname">{{ item.hostname.hostname }}</td>
+                    <td><input name="host" type="text" placeholder="Hostname goes here" class="form-control" value="{{ item.hostname.hostname }}"></td>
+                    <!--<td contenteditable="true" name="hostname">{{ item.hostname.hostname }}</td>-->
+                </tr>
+                <tr>
+                    <th>Aliases</th>
+                    <td><input name="alias" type="text" placeholder="Aliases go here" class="form-control" value="{{ item.hostname.aliases }}"></td>
+                    <!--<td contenteditable="true" name="aliases">{{ item.hostname.aliases }}</td>-->
                 </tr>
                 <tr>
                     <th>Location</th>
@@ -49,8 +58,14 @@
                     <td contenteditable="true">{{ item.manufacturer_model }}</td>
                 </tr>
                 <tr>
+                    <th>Description</th>
+                    <td><input name="desc" type="text" placeholder="Description goes here" class="form-control" value="{{ item.description }}"></td>
+                    <!--<td contenteditable="true" name="vttag">{{ item.vt_tag }}</td> -->
+                </tr>
+                <tr>
                     <th>VT Tag</th>
-                    <td contenteditable="true" name="vttag">{{ item.vt_tag }}</td>
+                    <td><input name="vttag" type="text" placeholder="VT tag goes here" class="form-control" value="{{ item.vt_tag }}"></td>
+                    <!--<td contenteditable="true" name="vttag">{{ item.vt_tag }}</td> -->
                 </tr>
                 <tr>
                     <th>IPv4</th>
@@ -66,7 +81,8 @@
                 </tr>
                 <tr>
                     <th>Notes</th>
-                    <td contenteditable="true" name="notes">{{ item.notes }}</th>
+                    <td><input name="notes" type="text" placeholder="Include Notes here" class="form-control" value="{{ item.notes }}"></td>
+                    <!--<td contenteditable="true" name="notes">{{ item.notes }}</th> -->
                 </tr>
             </tbody>
         </table>
@@ -101,9 +117,9 @@
         </button></a>
 
         &nbsp;&nbsp;&nbsp;
-        <a href=""><button id="confirm-btn" class="btn btn-outline-secondary" type="button">
+        <button id="confirm-btn" class="btn btn-outline-secondary" type="submit">
             Apply Changes
-        </button></a>
+        </button>
     </div>
 </div>
 </form>
