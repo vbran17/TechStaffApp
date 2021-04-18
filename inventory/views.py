@@ -1,11 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import Permission, User
 from django.contrib.auth import authenticate, login, logout
-<<<<<<< HEAD
 from .models import *
-=======
-from .models import Equipment, Building, IP, History, Hostname
->>>>>>> Got edit capabilites to work
 from django.db.models import Q
 from django.contrib.auth.models import User
 from rest_framework.generics import ListAPIView
@@ -278,7 +274,6 @@ def dns_view(request):
     size = len(items)
     results = 'Search returned %i items(s)' % (size)
     value = 0
-<<<<<<< HEAD
 
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="dns.csv"'
@@ -297,24 +292,6 @@ def dns_view(request):
     writer.writerow([total])
     return response
 
-=======
-    
-    response = HttpResponse(content_type='text/csv')  
-    response['Content-Disposition'] = 'attachment; filename="dns.csv"'  
-    writer = csv.writer(response)  
-    #writer.writerow([results])  
-    writer.writerow(['NAME', 'IP_ADDRESS', 'MAILXCHANGE', 'ALIAS', 'COMMENT'])  
-    for i in items:
-        value = value + int(i.purchase_value)
-        ip = i.hostname.ipv4.address + ',' + i.hostname.ipv6.address
-        writer.writerow([i.hostname.hostname, ip, i.mail_exchange, i.hostname.aliases, i.notes])  
-    total = 'Total value: $%i' % (value)
-    print(results)
-    print(total)
-    
-    #writer.writerow([total])
-    return response  
->>>>>>> Got edit capabilites to work
 
 def addequipment_view(request):
     form = EquipmentForm(request.POST or None)
