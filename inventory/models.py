@@ -31,6 +31,7 @@ class Hostname(models.Model):
     aliases = models.CharField(max_length=255, blank=True)
     ipv4 = models.ForeignKey(IP, on_delete=models.RESTRICT, blank=True, related_name="HostnameIPv4")
     ipv6 = models.ForeignKey(IP, on_delete=models.RESTRICT, blank=True, related_name="HostnameIPv6")
+    in_use = models.BooleanField()
 
 class Equipment(models.Model):
     vt_tag = models.CharField(max_length=255, blank=True)
