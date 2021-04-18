@@ -56,7 +56,7 @@
             <th scope="col">Custodian</th>
             <th scope="col">Hostname</th>
             <th scope="col">Manufacturer/Model</th>
-            <th scope="col">Last Scanned</th>
+            <th scope="col">Building</th>
             <th scope="col">VT Tag</th>
             <th scope="col">Actions</th>
           </tr>
@@ -64,12 +64,12 @@
         <tbody>
         {% for equipment in equipments %}
         <tr>
-            <th scope="row">{{ equipment.cstag }}</th>
+            <th scope="row">{{ equipment.cs_tag }}</th>
             <td>{{ equipment.custodian }}</td>
-            <td>{{ equipment.hostname }}</td>
+            <td>{{ equipment.hostname.hostname }}</td>
             <td>{{ equipment.manufacturer_model }}</td>
-            <td>{{ equipment.sdate }}</td>
-            <!-- <td>{{ equipment.vttag }}</td> -->
+            <td>{{ equipment.building.name }}</td>
+            <td>{{ equipment.vt_tag }}</td>
             <td>
              <a href="/itemdetails/{{equipment.id}}/"
                 ><button
@@ -80,7 +80,6 @@
                   View
                 </button></a
               >
-              
             </td>
           </tr>
         {% endfor %}

@@ -43,7 +43,7 @@ class Equipment(models.Model):
     custodian = models.CharField(max_length=255, blank=True)
     purchase_order = models.CharField(max_length=255, blank=True)
     purchase_date = models.DateField(blank=True)
-    purchase_value = models.CharField(max_length=255, blank=True)
+    purchase_value = models.DecimalField(max_digits=6, decimal_places=2)
     acquisition_date = models.DateField(blank=True)
     hostname = models.ForeignKey(Hostname, on_delete=models.RESTRICT, blank=True)
     dept = models.CharField(max_length=10, blank=True)

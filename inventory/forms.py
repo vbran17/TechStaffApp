@@ -10,12 +10,30 @@ class EquipmentForm(ModelForm):
                     'custodian', 'purchase_order', 'acquisition_date', 'purchase_date',
                     'purchase_value', 'building', 'room', 'hostname', 'notes']
         CLASSIFICTATIONS = (('', '---------'),('laptop', 'Laptop'), ('desktop', 'Desktop'))
+        
+        STATUSES = (('', '--------'), ('in_use', 'In use'), ('in_storage', 'In storage'), ('on_loan', 'On loan'),
+                    ('damaged', 'Damaged'), ('missing', 'Missing'), ('surplused', 'Surplused'), ('transferred', 'Transferred'),
+                    ('written_off', 'Written off'), ('orphaned', 'Orphaned'))
         CUSTODIANS = (('', '--------------------'),('rich', 'Richard Charles'), ('chris', 'Chris Arnold'), ('mike', 'Micheal Davis'))
-        widgets = {'classification': forms.Select(choices=CLASSIFICTATIONS), 
+        
+        widgets = {
+                    'status': forms.Select(choices=STATUSES, attrs={'class': 'form-select'}),
+                    'classification': forms.Select(choices=CLASSIFICTATIONS, attrs={'class': 'form-select'}), 
                     'custodian': forms.Select(choices=CUSTODIANS), 
                     'notes': forms.Textarea(attrs={'cols': 40, 'rows': 3}), 
                     'description': forms.Textarea(attrs={'cols': 40, 'rows': 3}), 
-                    'pdate': forms.DateInput(attrs={'data-target': '.datepicker'})}
+                    'pdate': forms.DateInput(attrs={'data-target': '.datepicker'}),
+                    'vt_tag': forms.TextInput(attrs={'class': 'form-control'}),
+                    'cs_tag': forms.TextInput(attrs={'class': 'form-control'}),
+                    'serial_number': forms.TextInput(attrs={'class': 'form-control'}),
+                    'manufacturer_model': forms.TextInput(attrs={'class': 'form-control'}),
+                    'description': forms.Textarea(attrs={'class': 'form-control'}),
+                    'purchase_order': forms.TextInput(attrs={'class': 'form-control'}),
+                    'purchase_value': forms.NumberInput(attrs={'class': 'form-control'}),
+                    'building': forms.Select(attrs={'class': 'form-select'}),
+                    'room': forms.TextInput(attrs={'class': 'form-control'}),
+                    'notes': forms.Textarea(attrs={'class': 'form-control'}),
+                    }
 
 
 class BuildingForm(ModelForm):

@@ -144,9 +144,9 @@ def dns_view(request):
     writer.writerow(['CS Tag', 'Custodian', 'Hostname',
                     'Location', 'Manufacturer-Model', 'VT Tag'])
     for i in items:
-        value = value + int(i.pvalue)
-        writer.writerow([i.cstag, i.custodian, i.hostname,
-                        i.building.name, i.manufacturer_model, i.vttag])
+        if i.purchase_value != "":
+            value = value + int(i.purchase_value)
+        writer.writerow([i.cs_tag, i.custodian, i.hostname.hostname, i.building.name, i.manufacturer_model, i.vt_tag])
     total = 'Total value: $%i' % (value)
     print(results)
     print(total)
@@ -164,8 +164,8 @@ def addequipment_view(request):
     '''
     if form.is_valid():
         form.save()
-    return render(request, 'inventory/addequipment.html', {'form': form})
-
+        return redirect('/home')
+    return render(request, 'inventory/addequipment.html', {'form':form})
 
 def homeuseform_view(request):
     return render(request, 'events/index.html')
