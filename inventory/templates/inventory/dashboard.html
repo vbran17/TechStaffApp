@@ -1,0 +1,43 @@
+{% load static %}
+
+<!-- stuff -->
+
+{% block extracss %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.24/b-1.7.0/r-2.2.7/sb-1.0.1/sp-1.2.2/datatables.min.css"/>
+<link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css"/>
+{% endblock %}
+
+<!-- Glucose Data Table -->
+
+<table id="example2" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>PID</th>
+                <th>Email</th>
+                <th>Phone</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in Users %}
+            <tr>
+              <th scope="row">{{ user.first_name }}</th>
+              <td>{{ user.last_name }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.phone }}</td>
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+<!-- End Glucose Data Table -->
+
+{% block extrajs %}
+
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.24/b-1.7.0/r-2.2.7/sb-1.0.1/sp-1.2.2/datatables.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<script src="{% static 'js/tables.js' %}"></script>
+
+{% endblock %}
