@@ -69,10 +69,23 @@ class IPListing(ListAPIView):
         ip_list = IP.objects.all()
         building = self.request.query_params.get('building', None)
         in_use = self.request.query_params.get('in_use', None)
+
         if building:
             ip_list = ip_list.filter(building__name=building)
         if in_use:
-            ip_list = ip_list.filter(in_use=in_use)
+            if in_use == "Assigned IPV4s":
+                ip_list = ip_list.filter(in_use=True).filter(ip_type="IPV4")
+            elif in_use == "Unassigned IPV4s":
+                ip_list = ip_list.filter(in_use=False).filter(ip_type="IPV4")
+            elif in_use == "Assigned IPV6s":
+                ip_list = ip_list.filter(in_use=True).filter(ip_type="IPV6")
+            elif in_use == "Unassigned IPV6s":
+                ip_list = ip_list.filter(in_use=False).filter(ip_type="IPV6")
+            elif in_use == "Hostname":   
+                ip_list = ip_list
+                # ip4_list = Hostname.objects.all().values_list('IPV4')
+                # ip6_list = Hostname.objects.all().values_list('IPV6')
+                # joined_list = ip4_list + ip6_list
         return ip_list
 
 

@@ -49,12 +49,11 @@ function putTableData(result) {
         $("#list_data").show();
         $("#ip_listing").html(""); 
         $.each(result, function (a, b) {
-            console.log(b)
             row = "<tr> <td>" + b.address + "</td>" +
-            "<td>" + b.ip_type + "</td>" +
-            "<td title=\"" + b.building + "\">" + b.building + "</td>" +
-            "<td title=\"" + b.hostname + "\">" + b.hostname + "</td>" +
-            "<td>" + b.in_use + "</td>" +
+                "<td>" + b.ip_type + "</td>" +
+                "<td title=\"" + b.building + "\">" + b.building + "</td>" +
+                "<td title=\"" + b.hostname + "\">" + b.hostname + "</td>" +
+                "<td>" + b.in_use + "</td></tr>"
             $("#ip_listing").append(row);   
         });
     }
@@ -68,10 +67,10 @@ function getAPIData() {
         data: send_data,
         success: function (result) {
             putTableData(result);
+            console.log("in api data")
         },
         error: function (response) {
             $("#list_data").hide();
-            console.log(response)
         }
     });
 }
