@@ -1,63 +1,138 @@
-{% extends 'base.html' %}
-{% block content %}
-{% load static %}
+{% extends 'base.html' %} {% block content %} {% load static %}
 
 <!-- stuff -->
 
 {% block extracss %}
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.24/b-1.7.0/r-2.2.7/sb-1.0.1/sp-1.2.2/datatables.min.css"/>
-<link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css"/>
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="https://cdn.datatables.net/v/dt/dt-1.10.24/b-1.7.0/r-2.2.7/sb-1.0.1/sp-1.2.2/datatables.min.css"
+/>
+<link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" />
 {% endblock %}
 
 <!-- - Title of Page -->
 <h1 class="d-flex justify-content-center align-items-center">Admin Page</h1>
+<button
+  type="button"
+  class="btn btn-primary"
+  data-toggle="modal"
+  data-target="#addUserModal"
+>
+  Launch demo modal
+</button>
 
-<!--- Table of Registered Users and Info ----->
-<!-- <nav class="navbar top-navbar navbar-light bg-light px-9"> -->
-<!-- <div class="row">
-  <div class="input-group">
-    <input id="searchField" type="text" class="form-control" aria-label="Search" />
-    <button class="btn btn-outline-secondary" type="button">
-      <i class="bi bi-search"></i>
-    </button>
+
+
+<table id="example" class="display" style="width: 100%">
+  <thead>
+    <tr>
+      <th scope="col">PID</th>
+      <th scope="col">Role Group</th>
+      <th scope="col">First Name</th>
+      <th scope="col">Last Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Phone</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in Users %}
+    <tr>
+      <th scope="row">{{ user.inventoryuser.pid }}</th>
+      <td></td>
+      <td>{{ user.first_name }}</td>
+      <td>{{ user.last_name }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.inventoryuser.phone_number }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<!-- Add User Modal -->
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="addUserModal"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="post">
+        {% csrf_token %}
+        <div class="modal-body">
+          <table class="table table-responsive">
+            <tbody>
+              <tr>
+                <td>{{ InventoryUserForm.pid.label_tag }}</td>
+                <td>{{ InventoryUserForm.pid }}</td>
+              </tr>
+              <tr>
+                <td>{{ UserForm.first_name.label_tag }}</td>
+                <td>{{ UserForm.first_name }}</td>
+              </tr>
+              <tr>
+                <td>{{ UserForm.last_name.label_tag }}</td>
+                <td>{{ UserForm.last_name }}</td>
+              </tr>
+              <tr>
+                <td>{{ InventoryUserForm.phone_number.label_tag }}</td>
+                <td>{{ InventoryUserForm.phone_number }}</td>
+              </tr>
+              <tr>
+                <td>{{ UserForm.email.label_tag }}</td>
+                <td>{{ UserForm.email }}</td>
+              </tr>
+              <tr>
+                <td>{{ UserForm.username.label_tag }}</td>
+                <td>{{ UserForm.username }}</td>
+              </tr>
+              <tr>
+                <td>{{ UserForm.password1.label_tag }}</td>
+                <td>{{ UserForm.password1 }}</td>
+              </tr>
+              <tr>
+                <td>{{ UserForm.password2.label_tag }}</td>
+                <td>{{ UserForm.password2 }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+          </button>
+          <input type="submit" value="Add User" class="btn btn-primary" />
+        </div>
+      </form>
+    </div>
   </div>
-</div> -->
-<!-- </nav> -->
-
-<!-- <nav class="navbar top-navbar navbar-light bg-light px-9"> -->
-<!-- <div class="row">
-  <div class="table-responsive"> -->
-
-    <table id="example" class="display" style="width:100%">
-      <thead>
-        <tr>
-          <th scope="col">Name</th>
-          <th scope="col">PID</th>
-          <th scope="col">Email</th>
-          <th scope="col">Phone</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for user in Users %}
-        <tr>
-          <th scope="row">{{ user.first_name }}</th>
-          <td>{{ user.last_name }}</td>
-          <td>{{ user.email }}</td>
-          <td>{{ user.phone }}</td>
-        </tr>
-        {% endfor %}
-
-      </tbody>
-    </table>
-  <!-- </div>
+</div>
+<!-- </div>
 </div> -->
 <!-- </nav> -->
 {% block extrajs %}
 
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.24/b-1.7.0/r-2.2.7/sb-1.0.1/sp-1.2.2/datatables.min.js"></script>
+<script
+  type="text/javascript"
+  src="https://cdn.datatables.net/v/dt/dt-1.10.24/b-1.7.0/r-2.2.7/sb-1.0.1/sp-1.2.2/datatables.min.js"
+></script>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 <script src="{% static 'js/tables.js' %}"></script>
+<script type="text/javascript"></script>
 
-{% endblock %}
-{% endblock %}
+{% endblock %} {% endblock %}

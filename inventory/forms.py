@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Equipment, Building, Hostname
+from django.contrib.auth.forms import UserCreationForm
+from .models import *
 
 
 class EquipmentForm(ModelForm):
@@ -50,6 +51,35 @@ class HostnameForm(ModelForm):
 #for IP Form?
 class IPRangeForm(forms.Form):
     ip_range = forms.CharField(label='IP Range', max_length=256)
+
+class InventoryUserForm(ModelForm):
+    class Meta:
+        model = InventoryUser
+        exclude = ['user']
+        fields = ['phone_number', 'pid']
+        widgets = {
+            'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'pid': forms.TextInput(attrs={'class': 'form-control'})
+
+        }
+
+class UserForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+
+
+            
+        }
+    def __init__(self, *args, **kwargs):
+        super(UserForm, self).__init__(*args, **kwargs)
+        self.fields['password1'].widget = forms.PasswordInput(attrs={'class': 'form-control'})
+        self.fields['password2'].widget = forms.PasswordInput(attrs={'class': 'form-control'})
 
 
 

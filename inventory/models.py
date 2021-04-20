@@ -2,14 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
-'''
-class PersonalID(models.Model):
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    office = models.CharField(max_length=255)
-    email = models.EmailField(max_length=255)
-    phone = models.CharField(max_length=255)
-'''
+
 class InventoryUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=20, blank=True, null=True)

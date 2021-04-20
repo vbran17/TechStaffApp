@@ -8,10 +8,10 @@ from rest_framework.generics import ListAPIView
 from .serializers import IPSerializers
 import csv
 from django.http import HttpResponse, JsonResponse
-from .forms import EquipmentForm, HostnameForm, BuildingForm, IPRangeForm
+from .forms import *
 from django.core import serializers
 from django.contrib import messages
-
+from django.forms import formset_factory
 
 
 # Create your views here.
@@ -182,6 +182,21 @@ def gen_ipv4(request, b_name, item_id):
 def admin_view(request):
     context = {}
     context["Users"] = User.objects.all()
+    context["UserForm"] = UserForm(request.POST or None)
+    context["InventoryUserForm"] = InventoryUserForm(request.POST or None)
+    #UserFormset = formset_factory(context["UserForm"])
+    #InventoryUserFormset = formset_factory(context["InventoryUserForm"])
+    if request.method == "POST":
+        print("gets heres")
+        #print(UserFormset.errors)
+        print(context["InventoryUserForm"].errors)
+        print(context["UserForm"].errors)
+        if context["UserForm"].is_valid() and context["InventoryUserForm"].is_valid():
+            user = context["UserForm"].save()
+            inventory_user = context["InventoryUserForm"].save(commit=False)
+            inventory_user.user = user
+            inventory_user.save()
+            print("gets heres")
     return render(request, 'inventory/admin.html', context)
 
 
