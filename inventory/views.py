@@ -4,8 +4,18 @@ from django.contrib.auth import authenticate, login, logout
 from .models import Equipment, Building, IP, History
 from django.db.models import Q
 import csv
+<<<<<<< Updated upstream
 from django.http import HttpResponse
 from .forms import EquipmentForm
+=======
+import re
+from django import forms
+from django.http import HttpResponse, JsonResponse
+from .forms import EquipmentForm, HostnameForm, BuildingForm, IPRangeForm
+from django.core import serializers
+from django.contrib import messages
+
+>>>>>>> Stashed changes
 
 
 # Create your views here.
@@ -47,6 +57,77 @@ def ipdash_view(request):
     }
     return render(request, 'inventory/ip-dashboard.html', context)
 
+<<<<<<< Updated upstream
+=======
+
+class IPListing(ListAPIView):
+    serializer_class = IPSerializers
+
+    def get_queryset(self):
+        ip_list = IP.objects.all()
+        building = self.request.query_params.get('building', None)
+        in_use = self.request.query_params.get('in_use', None)
+        if building:
+            ip_list = ip_list.filter(building__name=building)
+        if in_use:
+            ip_list = ip_list.filter(in_use=in_use)
+        return ip_list
+
+
+def IPDash(request):
+    context = { }
+    context['hostname_form'] = HostnameForm(request.POST or None)
+    context['building_form'] = BuildingForm(request.POST or None)
+    context['ip_range_form'] = IPRangeForm(request.POST or None)
+    context['building_objects'] = Building.objects.all()
+
+    if request.method == 'POST':
+        if request.POST.get('buildingsubmit'):
+            if context['building_form'].is_valid():
+                context['building_form'].save()
+        if request.POST.get('hostnamesubmit'):
+            if context['hostname_form'].is_valid():
+                context['hostname_form'].save()
+        if request.POST.get('iprangesubmit'):
+            if context['ip_range_form'].is_valid():
+                #parsing each individual entry, an entry could be a single IP or a range block ('.x/y')
+                address_array = (context['ip_range_form'].cleaned_data['ip_range']).split(",")
+                address_array = [x.strip() for x in address_array]
+
+                # regex from: https://www.oreilly.com/library/view/regular-expressions-cookbook/9780596802837/ch07s16.html
+                selected_building = context['ip_range_form'].cleaned_data['building']
+                for block in address_array:
+                    if re.match("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$", block):
+                        IP.objects.create(
+                            building=selected_building,
+                            address=block,
+                            in_use=False)
+
+    return render(request, "inventory/ip-dashboard.html", context)
+
+
+def getBuilding(request):
+    print("in building method")
+    if request.method == "GET" and request.is_ajax():
+        buildings = Building.objects.all().values_list('name').distinct()
+        buildings = [i[0] for i in list(buildings)]
+        data = {
+            "buildings": buildings,
+        }
+        return JsonResponse(data, status=200)
+
+
+def ipdash_view_filter(request):
+    building_objects = Building.objects.all()
+    IP_objects = IP.objects.all()
+    context = {
+        'building_objects': building_objects,
+        'IPs': IP_objects
+    }
+    return render(request, 'inventory/ip-dashboard.html', context)
+
+
+>>>>>>> Stashed changes
 def itemdetails_view(request, item_id):
     #run a query to get all the info for the item_id 
     id_item = int(item_id)
