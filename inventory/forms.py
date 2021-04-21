@@ -33,8 +33,8 @@ class EquipmentForm(ModelForm):
                     'purchase_value': forms.NumberInput(attrs={'class': 'form-control'}),
                     'building': forms.Select(attrs={'class': 'form-select'}),
                     'room': forms.TextInput(attrs={'class': 'form-control'}),
-                    'notes': forms.Textarea(attrs={'class': 'form-control'}),
-                    }
+                    'notes': forms.Textarea(attrs={'class': 'form-control'}),}
+
 
 
 class BuildingForm(ModelForm):
@@ -46,11 +46,12 @@ class BuildingForm(ModelForm):
 class HostnameForm(ModelForm):
     class Meta:
         model = Hostname
-        fields = ['hostname', 'ipv4', 'ipv6', 'aliases']
+        fields = ['hostname', 'building', 'ipv4', 'ipv6', 'aliases']
 
 #for IP Form?
 class IPRangeForm(forms.Form):
     ip_range = forms.CharField(label='IP Range', max_length=256)
+    building = forms.ModelChoiceField(queryset=Building.objects.all(), empty_label="--Select a building--")
 
 class InventoryUserForm(ModelForm):
     class Meta:
@@ -81,7 +82,3 @@ class UserForm(UserCreationForm):
         self.fields['password1'].widget = forms.PasswordInput(attrs={'class': 'form-control'})
         self.fields['password2'].widget = forms.PasswordInput(attrs={'class': 'form-control'})
 
-
-
-
-        

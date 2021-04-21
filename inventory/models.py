@@ -27,6 +27,7 @@ class IP(models.Model):
     date = models.DateField(auto_now_add=True, blank=True)
     in_use = models.BooleanField()
 
+
 class Hostname(models.Model):
     hostname = models.CharField(max_length=255)
     building = models.ForeignKey(Building, on_delete=models.RESTRICT, blank=True)

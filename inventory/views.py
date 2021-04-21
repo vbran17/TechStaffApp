@@ -7,11 +7,24 @@ from django.contrib.auth.models import User
 from rest_framework.generics import ListAPIView
 from .serializers import IPSerializers
 import csv
+
+from django.http import HttpResponse
+from .forms import EquipmentForm
+
+import re
+from django import forms
+from django.http import HttpResponse, JsonResponse
+from .forms import EquipmentForm, HostnameForm, BuildingForm, IPRangeForm
+from django.core import serializers
+from django.contrib import messages
+
+
 from django.http import HttpResponse, JsonResponse
 from .forms import *
 from django.core import serializers
 from django.contrib import messages
 from django.forms import formset_factory
+
 
 
 # Create your views here.
@@ -210,6 +223,7 @@ def ipdash_view(request):
     return render(request, 'inventory/ip-dashboard.html', context)
 
 
+
 class IPListing(ListAPIView):
     serializer_class = IPSerializers
 
@@ -217,10 +231,24 @@ class IPListing(ListAPIView):
         ip_list = IP.objects.all()
         building = self.request.query_params.get('building', None)
         in_use = self.request.query_params.get('in_use', None)
+
         if building:
             ip_list = ip_list.filter(building__name=building)
         if in_use:
-            ip_list = ip_list.filter(in_use=in_use)
+            if in_use == "Assigned IPV4s":
+                ip_list = ip_list.filter(in_use=True).filter(ip_type="IPV4")
+            elif in_use == "Unassigned IPV4s":
+                ip_list = ip_list.filter(in_use=False).filter(ip_type="IPV4")
+            elif in_use == "Assigned IPV6s":
+                ip_list = ip_list.filter(in_use=True).filter(ip_type="IPV6")
+            elif in_use == "Unassigned IPV6s":
+                ip_list = ip_list.filter(in_use=False).filter(ip_type="IPV6")
+            elif in_use == "Hostname":   
+                ip_list = ip_list
+                # ip4_list = Hostname.objects.all().values_list('IPV4')
+                # ip6_list = Hostname.objects.all().values_list('IPV6')
+                # joined_list = ip4_list + ip6_list
+
         return ip_list
 
 
@@ -238,6 +266,21 @@ def IPDash(request):
         if request.POST.get('hostnamesubmit'):
             if context['hostname_form'].is_valid():
                 context['hostname_form'].save()
+
+        if request.POST.get('iprangesubmit'):
+            if context['ip_range_form'].is_valid():
+                #parsing each individual entry, an entry could be a single IP or a range block ('.x/y')
+                address_array = (context['ip_range_form'].cleaned_data['ip_range']).split(",")
+                address_array = [x.strip() for x in address_array]
+
+                # regex from: https://www.oreilly.com/library/view/regular-expressions-cookbook/9780596802837/ch07s16.html
+                selected_building = context['ip_range_form'].cleaned_data['building']
+                for block in address_array:
+                    if re.match("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$", block):
+                        IP.objects.create(
+                            building=selected_building,
+                            address=block,
+                            in_use=False)
 
     return render(request, "inventory/ip-dashboard.html", context)
 
@@ -261,6 +304,7 @@ def ipdash_view_filter(request):
         'IPs': IP_objects
     }
     return render(request, 'inventory/ip-dashboard.html', context)
+
 
 
 def itemdetails_view(request, item_id):
