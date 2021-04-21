@@ -15,11 +15,6 @@ class EquipmentForm(ModelForm):
                     'custodian': forms.Select(choices=CUSTODIANS), 
                     'notes': forms.Textarea(attrs={'cols': 40, 'rows': 3}), 
                     'description': forms.Textarea(attrs={'cols': 40, 'rows': 3}), 
-<<<<<<< Updated upstream
-                    'pdate': forms.DateInput(attrs={'data-target': '.datepicker'})}
-<<<<<<< HEAD
-        exclude = ['history']
-=======
                     'pdate': forms.DateInput(attrs={'data-target': '.datepicker'}),
                     'vt_tag': forms.TextInput(attrs={'class': 'form-control'}),
                     'cs_tag': forms.TextInput(attrs={'class': 'form-control'}),
@@ -30,10 +25,8 @@ class EquipmentForm(ModelForm):
                     'purchase_value': forms.NumberInput(attrs={'class': 'form-control'}),
                     'building': forms.Select(attrs={'class': 'form-select'}),
                     'room': forms.TextInput(attrs={'class': 'form-control'}),
-                    'notes': forms.Textarea(attrs={'class': 'form-control'}),
-                    }
-=======
->>>>>>> f09eebe18480ab9d1bc6b48db82a67e538226920
+                    'notes': forms.Textarea(attrs={'class': 'form-control'}),}
+
 
 
 class BuildingForm(ModelForm):
@@ -45,7 +38,6 @@ class BuildingForm(ModelForm):
 class HostnameForm(ModelForm):
     class Meta:
         model = Hostname
-<<<<<<< HEAD
         fields = ['hostname', 'building', 'ipv4', 'ipv6', 'aliases']
 
 #for IP Form?
@@ -53,21 +45,6 @@ class IPRangeForm(forms.Form):
     ip_range = forms.CharField(
         label='IP Range',
         max_length=256,
-        required=True,
     )
     building = forms.ModelChoiceField(queryset=Building.objects.all(), empty_label="--Select a building--")
 
-
->>>>>>> Stashed changes
-=======
-        fields = ['hostname', 'ipv4', 'ipv6', 'aliases']
-
-#for IP Form?
-class IPRangeForm(forms.Form):
-    ip_range = forms.CharField(label='IP Range', max_length=256)
-
-
-
-
-        
->>>>>>> f09eebe18480ab9d1bc6b48db82a67e538226920

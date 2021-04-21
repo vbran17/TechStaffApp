@@ -7,11 +7,10 @@ from django.contrib.auth.models import User
 from rest_framework.generics import ListAPIView
 from .serializers import IPSerializers
 import csv
-<<<<<<< HEAD
-<<<<<<< Updated upstream
+
 from django.http import HttpResponse
 from .forms import EquipmentForm
-=======
+
 import re
 from django import forms
 from django.http import HttpResponse, JsonResponse
@@ -19,12 +18,11 @@ from .forms import EquipmentForm, HostnameForm, BuildingForm, IPRangeForm
 from django.core import serializers
 from django.contrib import messages
 
->>>>>>> Stashed changes
-=======
+
 from django.http import HttpResponse, JsonResponse
 from .forms import EquipmentForm, HostnameForm, BuildingForm, IPRangeForm
 from django.core import serializers
->>>>>>> f09eebe18480ab9d1bc6b48db82a67e538226920
+
 
 
 # Create your views here.
@@ -76,11 +74,7 @@ def ipdash_view(request):
     }
     return render(request, 'inventory/ip-dashboard.html', context)
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> f09eebe18480ab9d1bc6b48db82a67e538226920
+
 
 class IPListing(ListAPIView):
     serializer_class = IPSerializers
@@ -89,12 +83,6 @@ class IPListing(ListAPIView):
         ip_list = IP.objects.all()
         building = self.request.query_params.get('building', None)
         in_use = self.request.query_params.get('in_use', None)
-<<<<<<< HEAD
-        if building:
-            ip_list = ip_list.filter(building__name=building)
-        if in_use:
-            ip_list = ip_list.filter(in_use=in_use)
-=======
 
         if building:
             ip_list = ip_list.filter(building__name=building)
@@ -112,7 +100,7 @@ class IPListing(ListAPIView):
                 # ip4_list = Hostname.objects.all().values_list('IPV4')
                 # ip6_list = Hostname.objects.all().values_list('IPV6')
                 # joined_list = ip4_list + ip6_list
->>>>>>> f09eebe18480ab9d1bc6b48db82a67e538226920
+
         return ip_list
 
 
@@ -130,7 +118,7 @@ def IPDash(request):
         if request.POST.get('hostnamesubmit'):
             if context['hostname_form'].is_valid():
                 context['hostname_form'].save()
-<<<<<<< HEAD
+
         if request.POST.get('iprangesubmit'):
             if context['ip_range_form'].is_valid():
                 #parsing each individual entry, an entry could be a single IP or a range block ('.x/y')
@@ -145,8 +133,6 @@ def IPDash(request):
                             building=selected_building,
                             address=block,
                             in_use=False)
-=======
->>>>>>> f09eebe18480ab9d1bc6b48db82a67e538226920
 
     return render(request, "inventory/ip-dashboard.html", context)
 
@@ -172,10 +158,7 @@ def ipdash_view_filter(request):
     return render(request, 'inventory/ip-dashboard.html', context)
 
 
-<<<<<<< HEAD
->>>>>>> Stashed changes
-=======
->>>>>>> f09eebe18480ab9d1bc6b48db82a67e538226920
+
 def itemdetails_view(request, item_id):
     # run a query to get all the info for the item_id
     id_item = int(item_id)
