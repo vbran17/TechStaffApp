@@ -47,6 +47,7 @@ class HostnameForm(ModelForm):
     class Meta:
         model = Hostname
         fields = ['hostname', 'building', 'ipv4', 'ipv6', 'aliases']
+        building = forms.ModelChoiceField(queryset=Building.objects.all(), empty_label="--Select a building--")
 
 #for IP Form?
 class IPRangeForm(forms.Form):
@@ -61,7 +62,6 @@ class InventoryUserForm(ModelForm):
         widgets = {
             'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
             'pid': forms.TextInput(attrs={'class': 'form-control'})
-
         }
 
 class UserForm(UserCreationForm):
@@ -72,10 +72,7 @@ class UserForm(UserCreationForm):
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control'}),
-
-
-            
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),            
         }
     def __init__(self, *args, **kwargs):
         super(UserForm, self).__init__(*args, **kwargs)
