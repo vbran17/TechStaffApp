@@ -7,6 +7,7 @@ WORKDIR /usr/src/app
 
 RUN apk update
 RUN pip install --upgrade pip
+RUN pip install django_rest_framework
 RUN apk add python3-dev
 RUN apk add gpgme-dev
 RUN apk add libc-dev

@@ -1,12 +1,18 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<div>
+<link rel="stylesheet" href="{% static 'css/addequipment.css' %}" />
+<link
+  href="https://www.cssscript.com/demo/sticky.css"
+  rel="stylesheet"
+  type="text/css"
+/>
 <!--- Title of Page -->
 <h1 class="d-flex justify-content-center align-items-center">IP Dashboard</h1>
 
 <!--- Dropdowns for Office, IP Filters, and Button for Adding IPs --->
 <!-- <<label for=""></label> -->
+<<<<<<< HEAD
   <div class="row">
     <form class="d-flex" method="get" >
       <div class="input-group" style="width: 100%; max-width: 300px; padding-right: 10px;">
@@ -42,6 +48,43 @@
       </div>
     </form>
   </div>
+=======
+<div class="row">
+  <form class="d-flex" method="get" >
+    <div class="input-group" style="width: 100%; max-width: 300px; padding-right: 10px;">
+      {% csrf_token %}
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="inputGroupSelect01">Building</label>
+        </div>
+        <select
+          id="search_by_building"
+          class="form-select"
+          name="building_options" url = "{%url 'inventory:get_building' %}">
+         <option value="all">All</option>
+          {% for entry in building_objects %}
+          <option value="{{ entry.id }}">{{ entry.name }}</option>
+          {% endfor %} 
+        </select>
+    </div>
+    <div class="input-group" style="width: 100%; max-width: 300px;">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="inputGroupSelect01">Views</label>
+        </div>
+        <select
+          id="search_by_options"
+          class="form-select"
+          name="building_options">
+          <option value="all">All</option>
+          <option value="Hostname">Hostnames</a></li>
+          <option value="AssignedIPV4">Assigned IPV4s</a></li>
+          <option value="AllIPV4">Unassigned IPV4s</a></li>
+          <option value="AssignedIPV6">Assigned IPV6s</a></li>
+          <option value="AllIPV6">Unassigned IPV6s</a></li>
+        </select>
+    </div>
+  </form>
+</div>
+>>>>>>> f09eebe18480ab9d1bc6b48db82a67e538226920
 
 <nav class="navbar top-navbar navbar-light bg-light px-9 justify-content-center">
   <div class="row" style="flex-grow: 2; padding-right: 10px">
@@ -53,7 +96,11 @@
     </div>
   </div>
   <div class="submit-row" style="padding-right: 10px;">
+<<<<<<< HEAD
     <button id="officeButton" class="btn btn-outline-secondary" type="button" style="width: 150px;">Add Office</button>
+=======
+    <button id="officeButton" class="btn btn-outline-secondary" type="button" style="width: 150px;">Add Building</button>
+>>>>>>> f09eebe18480ab9d1bc6b48db82a67e538226920
     <button id="hostnameButton" class="btn btn-outline-secondary" type="button" style="width: 150px;">Add Hostname</button>
     <button id="addIPsButton" class="btn btn-outline-secondary" type="button" style="width: 150px;">Add IPs</button>
   </div>
@@ -69,6 +116,7 @@
       <table class="table table-responsive">
           <thead>
               <tr>
+<<<<<<< HEAD
                   <th id="title" colspan="2" style="text-align: center; font-size: xx-large;">Add Office</th>
               </tr>
           </thead>
@@ -78,6 +126,22 @@
       </table>
       <div style="text-align: center;">
           <input type="submit" value="Submit" class="btn btn-outline-secondary" />
+=======
+                  <th id="title" colspan="2" style="text-align: center; font-size: xx-large;">Add Building</th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for field in building_form.visible_fields %}
+            <tr>
+              <td>{{field.label_tag}}</td>
+              <td>{{field}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+      </table>
+      <div style="text-align: center;">
+          <input name="buildingsubmit" type="submit" value="Submit" class="btn btn-outline-secondary" />
+>>>>>>> f09eebe18480ab9d1bc6b48db82a67e538226920
           <button id="cancelOffice" class="btn btn-outline-secondary" type="button">Cancel</button>
       </div>
   </form>
@@ -86,6 +150,7 @@
 <!-- Hostname Adding -->
 <div id="hostname-divider" class="bg-light" style="margin: 10px 0px;">
   <form method="POST" style="padding:20px;">
+<<<<<<< HEAD
       {% csrf_token %}
       <table class="table table-responsive">
           <thead>
@@ -102,6 +167,29 @@
           <button id="cancelHost" class="btn btn-outline-secondary" type="button">Cancel</button>
       </div>
   </form>
+=======
+    {% csrf_token %}
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th id="title" colspan="2" style="text-align: center; font-size: xx-large;">Add Hostname</th>
+            </tr>
+        </thead>
+        <tbody>
+          {% for field in hostname_form.visible_fields %}
+          <tr>
+            <td>{{field.label_tag}}</td>
+            <td>{{field}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+    <div style="text-align: center;">
+        <input name="hostnamesubmit" type="submit" value="Submit" class="btn btn-outline-secondary" />
+        <button id="cancelHost" class="btn btn-outline-secondary" type="button">Cancel</button>
+    </div>
+</form>
+>>>>>>> f09eebe18480ab9d1bc6b48db82a67e538226920
 </div>
 
 <!-- IP Range Adding -->
@@ -115,17 +203,31 @@
               </tr>
           </thead>
           <tbody>
+<<<<<<< HEAD
               {{ form.as_table }}
           </tbody>
       </table>
       <div style="text-align: center;">
           <input name="iprangesubmit" type="submit" value="Submit" class="btn btn-outline-secondary" />
+=======
+            {% for field in ip_range_form.visible_fields %}
+            <tr>
+              <td>{{field.label_tag}}</td>
+              <td>{{field}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+      </table>
+      <div style="text-align: center;">
+          <input type="submit" value="Submit" class="btn btn-outline-secondary" />
+>>>>>>> f09eebe18480ab9d1bc6b48db82a67e538226920
           <button id="cancelIPs" class="btn btn-outline-secondary" type="button">Cancel</button>
       </div>
   </form>
 </div>
 
 <!-- JavaScript Magic for Popup Menus-->
+<<<<<<< HEAD
 <script src="{% static 'js/popupMenusIPDashboard.js' %}">
 </script>
 
@@ -134,14 +236,42 @@
 
 
 
+=======
+{% block script %}
+  <script src="{% static 'js/popupMenusIPDashboard.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="{% static 'js/filterIPDashboard.js' %}" type="text/javascript"></script>
+{% endblock %}
+>>>>>>> f09eebe18480ab9d1bc6b48db82a67e538226920
 
 <nav class="navbar top-navbar navbar-light bg-light px-9">
   <div class="row">
     <label for="filler">Select a building to view IPs</label>
   </div>
 </nav>
+<<<<<<< HEAD
 <!--- Display Area for IP Addresses -->
+=======
+>>>>>>> f09eebe18480ab9d1bc6b48db82a67e538226920
 
+<!--- Display Area for IP Addresses -->
+<div class="table-responsive">
+  <table class="table table-bordered table-responsive table-hover table-striped"
+    id="list_data" data-toggle="table" url = "{% url 'inventory:ipdashboardfilter' %}">
+    <thead>
+        <tr>
+            <th data-field="address">Address</th>
+            <th data-field="type">Type</th>
+            <th data-field="building">Building</th>
+            <th data-field="hostname">Hostname</th>
+            <th data-field="in_use">In Use</th>
+        </tr>
+    </thead>
+    <tbody id="ip_listing">
+    </tbody>
+  </table>
 </div>
 {% endblock %}
 

@@ -1,10 +1,14 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Equipment
+from .models import Equipment, Building, Hostname
+
 
 class EquipmentForm(ModelForm):
     class Meta:
         model = Equipment
+        fields = ['dept', 'status', 'vt_tag', 'cs_tag', 'serial_number', 'manufacturer_model', 'classification', 'description',
+                    'custodian', 'purchase_order', 'acquisition_date', 'purchase_date',
+                    'purchase_value', 'building', 'room', 'hostname', 'notes']
         CLASSIFICTATIONS = (('', '---------'),('laptop', 'Laptop'), ('desktop', 'Desktop'))
         CUSTODIANS = (('', '--------------------'),('rich', 'Richard Charles'), ('chris', 'Chris Arnold'), ('mike', 'Micheal Davis'))
         widgets = {'classification': forms.Select(choices=CLASSIFICTATIONS), 
@@ -13,6 +17,7 @@ class EquipmentForm(ModelForm):
                     'description': forms.Textarea(attrs={'cols': 40, 'rows': 3}), 
 <<<<<<< Updated upstream
                     'pdate': forms.DateInput(attrs={'data-target': '.datepicker'})}
+<<<<<<< HEAD
         exclude = ['history']
 =======
                     'pdate': forms.DateInput(attrs={'data-target': '.datepicker'}),
@@ -27,6 +32,8 @@ class EquipmentForm(ModelForm):
                     'room': forms.TextInput(attrs={'class': 'form-control'}),
                     'notes': forms.Textarea(attrs={'class': 'form-control'}),
                     }
+=======
+>>>>>>> f09eebe18480ab9d1bc6b48db82a67e538226920
 
 
 class BuildingForm(ModelForm):
@@ -38,6 +45,7 @@ class BuildingForm(ModelForm):
 class HostnameForm(ModelForm):
     class Meta:
         model = Hostname
+<<<<<<< HEAD
         fields = ['hostname', 'building', 'ipv4', 'ipv6', 'aliases']
 
 #for IP Form?
@@ -51,3 +59,15 @@ class IPRangeForm(forms.Form):
 
 
 >>>>>>> Stashed changes
+=======
+        fields = ['hostname', 'ipv4', 'ipv6', 'aliases']
+
+#for IP Form?
+class IPRangeForm(forms.Form):
+    ip_range = forms.CharField(label='IP Range', max_length=256)
+
+
+
+
+        
+>>>>>>> f09eebe18480ab9d1bc6b48db82a67e538226920

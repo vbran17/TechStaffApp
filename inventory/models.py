@@ -30,8 +30,8 @@ class Hostname(models.Model):
     hostname = models.CharField(max_length=255)
     building = models.ForeignKey(Building, on_delete=models.RESTRICT, blank=True)
     aliases = models.CharField(max_length=255, blank=True)
-    ipv4 = models.ForeignKey(IP, on_delete=models.RESTRICT, blank=True, related_name="IPv4")
-    ipv6 = models.ForeignKey(IP, on_delete=models.RESTRICT, blank=True, related_name="IPv6")
+    ipv4 = models.ForeignKey(IP, on_delete=models.RESTRICT, blank=True, related_name="HostnameIPv4")
+    ipv6 = models.ForeignKey(IP, on_delete=models.RESTRICT, blank=True, related_name="HostnameIPv6")
 
 class Equipment(models.Model):
     vt_tag = models.CharField(max_length=255, blank=True)
@@ -49,7 +49,6 @@ class Equipment(models.Model):
     hostname = models.ForeignKey(Hostname, on_delete=models.RESTRICT, blank=True)
     dept = models.CharField(max_length=10, blank=True)
     status = models.CharField(max_length=128, blank=True)
-    mail_exchange = models.SmallIntegerField(blank=True)
     cs_tag = models.CharField(max_length=255, blank=True)
     notes = models.CharField(max_length=10000, blank=True)
 
