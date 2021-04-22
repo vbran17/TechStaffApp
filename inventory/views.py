@@ -26,6 +26,7 @@ from django.forms import formset_factory
 
 
 
+
 # Create your views here.
 def home_view(request):
     # Handles search query
@@ -237,18 +238,34 @@ def IPDash(request):
 
         if request.POST.get('iprangesubmit'):
             if context['ip_range_form'].is_valid():
-                #parsing each individual entry, an entry could be a single IP or a range block ('.x/y')
-                address_array = (context['ip_range_form'].cleaned_data['ip_range']).split(",")
-                address_array = [x.strip() for x in address_array]
-
-                # regex from: https://www.oreilly.com/library/view/regular-expressions-cookbook/9780596802837/ch07s16.html
                 selected_building = context['ip_range_form'].cleaned_data['building']
-                for block in address_array:
-                    if re.match("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$", block):
-                        IP.objects.create(
-                            building=selected_building,
-                            address=block,
-                            in_use=False)
+                ip_or_range_start = context['ip_range_form'].cleaned_data['ip_range_begin']
+
+                if context['ip_range_form'].cleaned_data['ip_range_end']:
+                    sets = ip_or_range_start.split(".")
+                    b_sets = list(map(int,sets))
+                    e_sets = list(map(int,(context['ip_range_form'].cleaned_data['ip_range_end']).split(".")))
+                    fixed = sets[0] + sets[1] + sets[2]
+                    fixed = ".".join(fixed) + "."
+                    if b_sets[:3] == e_sets[:3] and e_sets[3] >= b_sets[3]:
+                        for i in range(b_sets[3], e_sets[3]):
+                            address = fixed + str(i)
+                            IP.objects.create(
+                                building=selected_building,
+                                address=address,
+                                in_use=False)        
+                else:
+                    IP.objects.create(
+                        building=selected_building,
+                        address=ip_or_range_start,
+                        in_use=False)
+                messages.add_message(request, messages.SUCCESS, "IPv4(s) submitted!")
+            else:
+                messages.add_message(request, messages.WARNING, context['ip_range_form'].errors)
+                    
+                    
+
+
 
         if request.POST.get('IP_ID'):
             value = request.POST['IP_ID']

@@ -2,6 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from .models import *
+from django.core.validators import RegexValidator
 
 
 class EquipmentForm(ModelForm):
@@ -51,7 +52,10 @@ class HostnameForm(ModelForm):
 
 #for IP Form?
 class IPRangeForm(forms.Form):
-    ip_range = forms.CharField(label='IP Range', max_length=256)
+    ip_range_begin = forms.CharField(label='IP or IP Range Start', max_length=256, validators=[
+        RegexValidator('^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$', message="Must be valid IPv4 address, 0-255.0-255.0-255.0-255 acceptable")])
+    ip_range_end = forms.CharField(label='IP Range End', max_length=256, required=False, validators=[
+        RegexValidator('^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$', message="Must be valid IPv4 address, 0-255.0-255.0-255.0-255 acceptable")])
     building = forms.ModelChoiceField(queryset=Building.objects.all(), empty_label="--Select a building--")
 
 class InventoryUserForm(ModelForm):

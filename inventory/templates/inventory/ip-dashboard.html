@@ -13,7 +13,23 @@
   </div>
 </nav>
 
-
+{% if messages %}{% for message in messages %}
+  {% if message.tags == "success" %}
+    <div class="alert alert-dismissible alert-success">
+      <button type="button" class="close" data-dismiss="alert">
+      ×
+      </button>
+      <strong>{{message}}<strong>
+    </div>
+  {% else %}
+  <div class="alert alert-dismissible alert-danger">
+    <button type="button" class="close" data-dismiss="alert">
+    ×
+    </button>
+    <strong>{{message}}<strong>
+  </div>
+  {% endif %}
+{% endfor %}{% endif %}
 
 <!--- Popup Menus for adding an office, hostname, ip range and static load of javascript file (see below)-->
 <!-- Office Adding -->
@@ -67,6 +83,7 @@
     </div>
 </form>
 </div>
+
 
 <!-- IP Range Adding -->
 <div id="addIPs-divider" class="bg-light" style="margin: 10px 0px;">
