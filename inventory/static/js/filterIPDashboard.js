@@ -24,6 +24,11 @@ $(document).ready(function () {
             send_data['in_use'] = this.value;
         getAPIData();
     });
+
+    $('#searchField').on('change', function () {
+        send_data['search'] = this.value;
+        getAPIData();
+    });
 })
 
 
@@ -45,17 +50,26 @@ function resetFilters() {
 **/
 function putTableData(result) {
     let row;
+    let in_use_value;
     if(result.length > 0){
         $("#list_data").show();
         $("#ip_listing").html(""); 
         $.each(result, function (a, b) {
+            // console.log(b)
+            if( b.in_use ) { in_use_value = "Assigned"} 
+            else { in_use_value = "Unassigned" } 
+            
             row = "<tr> <td>" + b.address + "</td>" +
                 "<td>" + b.ip_type + "</td>" +
-                "<td title=\"" + b.building + "\">" + b.building + "</td>" +
+                "<td title=\"" + b.building + "\">" + b.building.name + "</td>" +
                 "<td title=\"" + b.hostname + "\">" + b.hostname + "</td>" +
-                "<td>" + b.in_use + "</td></tr>"
+                "<td>" + in_use_value + "</td></tr>"
             $("#ip_listing").append(row);   
         });
+    }
+    else{
+        console.log("here")
+        $("#list_data").hide();
     }
 }
 
@@ -67,7 +81,6 @@ function getAPIData() {
         data: send_data,
         success: function (result) {
             putTableData(result);
-            console.log("in api data")
         },
         error: function (response) {
             $("#list_data").hide();

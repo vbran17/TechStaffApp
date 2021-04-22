@@ -5,7 +5,7 @@ from .models import *
 from django.db.models import Q
 from django.contrib.auth.models import User
 from rest_framework.generics import ListAPIView
-from .serializers import IPSerializers
+from .serializers import IPSerializers, BuildingSerializers, HostnameSerializers
 import csv
 
 from django.http import HttpResponse
@@ -232,29 +232,34 @@ def ipdash_view(request):
 
 class IPListing(ListAPIView):
     serializer_class = IPSerializers
+    bserializer_class = BuildingSerializers
 
     def get_queryset(self):
         ip_list = IP.objects.all()
         building = self.request.query_params.get('building', None)
         in_use = self.request.query_params.get('in_use', None)
+        search = self.request.query_params.get('search', None)
 
         if building:
             ip_list = ip_list.filter(building__name=building)
         if in_use:
-            if in_use == "Assigned IPV4s":
-                ip_list = ip_list.filter(in_use=True).filter(ip_type="IPV4")
-            elif in_use == "Unassigned IPV4s":
-                ip_list = ip_list.filter(in_use=False).filter(ip_type="IPV4")
-            elif in_use == "Assigned IPV6s":
-                ip_list = ip_list.filter(in_use=True).filter(ip_type="IPV6")
-            elif in_use == "Unassigned IPV6s":
-                ip_list = ip_list.filter(in_use=False).filter(ip_type="IPV6")
-            elif in_use == "Hostname":   
-                ip_list = ip_list
-                # ip4_list = Hostname.objects.all().values_list('IPV4')
-                # ip6_list = Hostname.objects.all().values_list('IPV6')
-                # joined_list = ip4_list + ip6_list
-
+            if in_use == "AssignedIPV4":
+                ip_list = ip_list.filter(in_use=True).filter(ip_type="I4")
+                print(ip_list)
+            elif in_use == "UnassignedIPV4":
+                ip_list = ip_list.filter(in_use=False).filter(ip_type="I4")
+            elif in_use == "AssignedIPV6":
+                ip_list = ip_list.filter(in_use=True).filter(ip_type="I6")
+        if search:
+            if(ip_list.count() > 0):
+                if(ip_list.filter(building__name__icontains=search).count() != 0):
+                    ip_list = ip_list.filter(building__name__icontains=search)
+                elif(ip_list.filter(address__icontains=search).count() != 0):
+                    ip_list = ip_list.filter(address__icontains=search)
+                elif(ip_list.filter(ip_type__icontains=search).count() != 0):
+                    ip_list = ip_list.filter(ip_type__icontains=search)
+                else:
+                    ip_list = []
         return ip_list
 
 
@@ -264,6 +269,7 @@ def IPDash(request):
     context['building_form'] = BuildingForm(request.POST or None)
     context['ip_range_form'] = IPRangeForm(request.POST or None)
     context['building_objects'] = Building.objects.all()
+    context['IPS'] = IP.objects.all()
 
     if request.method == 'POST':
         if request.POST.get('buildingsubmit'):

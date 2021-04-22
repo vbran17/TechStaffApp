@@ -10,8 +10,8 @@
 <!--- Title of Page -->
 <h1 class="d-flex justify-content-center align-items-center">IP Dashboard</h1>
 
-<!--- Dropdowns for Office, IP Filters, and Button for Adding IPs ->
-<! <<label for=""></label> -->
+<!--- Dropdowns for Office, IP Filters, and Button for Adding IPs --->
+<!-- <<label for=""></label> -->
 <div class="row">
   <form class="d-flex" method="get" >
     <div class="input-group" style="width: 100%; max-width: 300px; padding-right: 10px;">
@@ -38,11 +38,9 @@
           class="form-select"
           name="building_options">
           <option value="all">All</option>
-          <option value="Hostname">Hostnames</a></li>
           <option value="AssignedIPV4">Assigned IPV4s</a></li>
-          <option value="AllIPV4">Unassigned IPV4s</a></li>
+          <option value="UnassignedIPV4">Unassigned IPV4s</a></li>
           <option value="AssignedIPV6">Assigned IPV6s</a></li>
-          <option value="AllIPV6">Unassigned IPV6s</a></li>
         </select>
     </div>
   </form>
@@ -139,7 +137,7 @@
           </tbody>
       </table>
       <div style="text-align: center;">
-          <input name="iprangesubmit" type="submit" value="Submit" class="btn btn-outline-secondary" />
+          <input type="submit" value="Submit" class="btn btn-outline-secondary" />
           <button id="cancelIPs" class="btn btn-outline-secondary" type="button">Cancel</button>
       </div>
   </form>
