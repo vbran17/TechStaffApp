@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from django.utils import timezone
 # Create your models here.
 
 class InventoryUser(models.Model):
@@ -52,9 +53,9 @@ class Equipment(models.Model):
     classification =  models.CharField(max_length=255, blank=True, verbose_name="Classification")
     custodian = models.CharField(max_length=255, blank=True, verbose_name="Custodian")
     purchase_order = models.CharField(max_length=255, blank=True, verbose_name="Purchase order")
-    purchase_date = models.DateField(blank=True, verbose_name="Purchase date")
+    purchase_date = models.DateField(blank=True, null=True, verbose_name="Purchase date")
     purchase_value = models.DecimalField(max_digits=6, decimal_places=2, verbose_name="Purchase value")
-    acquisition_date = models.DateField(blank=True, verbose_name="Acquisition date")
+    acquisition_date = models.DateField(blank=True, null=True, verbose_name="Acquisition date")
     hostname = models.ForeignKey(Hostname, on_delete=models.RESTRICT, blank=True, related_name="Hostname", verbose_name="Hostname")
     dept = models.CharField(max_length=10, blank=True, verbose_name="Department")
     status = models.CharField(max_length=128, blank=True, verbose_name="Status")

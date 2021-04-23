@@ -21,8 +21,7 @@
     padding-right: 50px;
     padding-left: 50px;
     overflow-y: auto;
-    height: 450px;
-    
+    height: 600px;
   }
   .column thead th {
       position: sticky;

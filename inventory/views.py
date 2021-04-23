@@ -28,6 +28,7 @@ from django.forms import formset_factory
 
 
 
+import random
 
 # Create your views here.
 @login_required
@@ -66,7 +67,21 @@ def logout_view(request):
     logout(request)
     return redirect('/login')
 
-@login_required
+def getHexVals():
+    hexVals = ['0', '1','2', '3', '4', '5', '6', '7','8', '9', 'A', 'B', 'C', 'D', 'E', 'F']
+    initial = ""
+    for x in range(0, 5):
+        final = ":"
+        for x in range(0, 4):
+            index = random.randint(0, 15)
+            char = hexVals[index]
+            final = final + char
+        initial = initial + final
+    print(initial)
+    return initial
+
+
+
 def gen_ipv6(request, b_name, item_id):
     building = Building.objects.filter(id=b_name)
     if len(building) == 0:
@@ -76,7 +91,7 @@ def gen_ipv6(request, b_name, item_id):
         ipv6.building = building[0]
         ipv6.ip_type = "I6"
         ipv6.in_use = True
-        address = building[0].ipv6_prefix + "::1111:1111:1113"
+        address = building[0].ipv6_prefix + getHexVals()
         print(address)
         ipv6.address = address
         ipv6.save()
@@ -112,11 +127,42 @@ def apply_changes(request, item_id):
     Description = request.POST.get('desc','').strip()
     HostedName = request.POST.get('host', '').strip()
     Alias = request.POST.get('alias', '').strip()
+    # Dropdown can be used for dropdown menu in classification
+    Room = request.POST.get('room', '').strip()
+    Status = request.POST.get('status', '').strip()
+    SerialNum = request.POST.get('serial', '').strip()
+    Classification = request.POST.get('class', '').strip()
+    # Still need purchase order, purchase date, purchase value, acquisition date, dept, mail exchange 
+    PurchaseOrder = request.POST.get('porder', '').strip()
+    PurchaseDate = request.POST.get('pdate', '').strip()
+    PurchaseValue = request.POST.get('pvalue', '').strip()
+    AcquistionDate = request.POST.get('aquidate', '').strip()
+    Department = request.POST.get('dept', '').strip()
+    MailExchange = request.POST.get('mex', '').strip()
     if equip:
+        pval = PurchaseValue[1:len(PurchaseValue)]
+        print("Purchase Value %s" % pval)
+        equip.purchase_value = pval
+        equip.purchase_order = PurchaseOrder
+        if equip.purchase_date:
+            print("do nothing")
+        else:
+            equip.purchase_date = PurchaseDate
+        if equip.acquisition_date: 
+            print("Do nothing")
+        else:
+            equip.acquisition_date = AcquistionDate
+        
+        equip.dept = Department
+        equip.mail_exchange = MailExchange
         equip.notes = Notes
         equip.cs_tag = CSTag
         equip.vt_tag = VTTag
         equip.description = Description
+        equip.room = Room
+        equip.status = Status
+        equip.serial_number = SerialNum
+        equip.classification = Classification
         equip.save()
         print('New Notes: ')
         print(Notes)
@@ -126,6 +172,13 @@ def apply_changes(request, item_id):
         print(VTTag)
         print('New description is: ')
         print(VTTag)
+        newCommand = History()
+        executor = '%s@vt.edu' % equip.custodian
+        newCommand.command = "%s made changes to Equipment" % executor
+        print(executor)
+        newCommand.executor = executor
+        newCommand.equipment = equip
+        newCommand.save()
         host = Hostname.objects.filter(hostname=HostedName, building=equip.building, in_use=False)
         if len(host) > 0:
             print(host[0].building.name)
@@ -135,6 +188,14 @@ def apply_changes(request, item_id):
                     equip.hostname = host[0]
                     equip.hostname.save()
                     messages.success(request, "Hostname Reassigned!")
+                    # create new command stamp
+                    newCommand = History()
+                    newCommand.command = "Hostname Reassigned"
+                    executor = '%s@vt.edu' % equip.custodian
+                    print(executor)
+                    newCommand.executor = executor
+                    newCommand.equipment = equip
+                    newCommand.save()
                 else:
                     messages.success(request, "Hostname currently in use")
             else:
@@ -142,6 +203,14 @@ def apply_changes(request, item_id):
                 equip.hostname.in_use = True
                 equip.hostname.save()
                 messages.success(request, "Hostname Assigned!")
+                # create new command stamp
+                newCommand = History()
+                newCommand.command = "Hostname assigned"
+                executor = '%s@vt.edu' % equip.custodian
+                print(executor)
+                newCommand.executor = executor
+                newCommand.equipment = equip
+                newCommand.save()
         else:
             # Needs to have a hostname created in the hostname for this to work properly
             if equip.hostname.hostname == HostedName:
@@ -154,7 +223,15 @@ def apply_changes(request, item_id):
                 equip.hostname.aliases = Alias
                 equip.hostname.save()
                 messages.info(request, "Alias Added!")
-            else:
+                # create new command stamp
+                newCommand = History()
+                newCommand.command = "Alias changed"
+                executor = '%s@vt.edu' % equip.custodian
+                print(executor)
+                newCommand.executor = executor
+                newCommand.equipment = equip
+                newCommand.save()
+            else: 
                 print("Lol")
         else:
             messages.info(request, "Cannot assign aliases to empty hostname!")
@@ -382,6 +459,22 @@ def itemdetails_view(request, item_id):
 @login_required
 def item_delete(request, item_id):
     print(request.path)
+    equip = Equipment.objects.get(id=item_id)
+    equip.hostname.in_use = False
+    # free ipv4
+    if equip.hostname.ipv4:
+        equip.hostname.ipv4.in_use = False
+    # delete ipv6
+    if equip.hostname.ipv6:
+        equip.hostname.ipv6.delete()
+    HistoryList = History.objects.filter(equipment=equip)
+    # delete histories 
+    for hist in HistoryList:
+        print(hist.command)
+        hist.delete()
+    equip.delete()
+    messages.info(request, "Equipment Deleted!")
+
     request.path = "/home/"
     request.path_info = "/home/"
     print(request.path_info)
@@ -393,23 +486,22 @@ def dns_view(request):
     size = len(items)
     results = 'Search returned %i items(s)' % (size)
     value = 0
-
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="dns.csv"'
-    writer = csv.writer(response)
-    writer.writerow([results])
-    writer.writerow(['CS Tag', 'Custodian', 'Hostname',
-                    'Location', 'Manufacturer-Model', 'VT Tag'])
+    
+    response = HttpResponse(content_type='text/csv')  
+    response['Content-Disposition'] = 'attachment; filename="dns.csv"'  
+    writer = csv.writer(response)  
+    #writer.writerow([results])  
+    writer.writerow(['NAME', 'IP_ADDRESS', 'MAILXCHANGE', 'ALIAS', 'COMMENT'])  
     for i in items:
-        if i.purchase_value != "":
-            value = value + int(i.purchase_value)
-        writer.writerow([i.cs_tag, i.custodian, i.hostname.hostname, i.building.name, i.manufacturer_model, i.vt_tag])
+        value = value + int(i.purchase_value)
+        ip = i.hostname.ipv4.address + ',' + i.hostname.ipv6.address
+        writer.writerow([i.hostname.hostname, ip, i.mail_exchange, i.hostname.aliases, i.notes])  
     total = 'Total value: $%i' % (value)
     print(results)
     print(total)
-
-    writer.writerow([total])
-    return response
+    
+    #writer.writerow([total])
+    return response  
 
 @login_required
 def addequipment_view(request):

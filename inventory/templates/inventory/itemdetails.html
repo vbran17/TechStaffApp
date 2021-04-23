@@ -20,7 +20,7 @@
 {% if item is not None %}
 <form method="POST" action="/itemdetails/{{item.id}}/apply_changes/">
     {% csrf_token %}
-<div class="row" style="width: 100%;">
+<div class="row" style="width: 100%; ">
     <div class="column">
         <table class="table table-responsive">
             <thead>
@@ -36,8 +36,17 @@
                     <!--<td contenteditable="true" name="cstag">{{ item.cs_tag }}</td> -->
                 </tr>
                 <tr>
+                    <th>VT Tag</th>
+                    <td><input name="vttag" type="text" placeholder="VT tag goes here" class="form-control" value="{{ item.vt_tag }}"></td>
+                    <!--<td contenteditable="true" name="vttag">{{ item.vt_tag }}</td> -->
+                </tr>
+                <tr>
                     <th>Custodian</th>
-                    <td contenteditable="true" name="custodian">{{ item.custodian }}</td>
+                    <td contenteditable="false" name="custodian">{{ item.custodian }}</td>
+                </tr>
+                <tr>
+                    <th>Departmemt</th>
+                    <td><input name="dept" type="text" placeholder="Departmemt goes here" class="form-control" value="{{ item.dept }}"></td>
                 </tr>
                 <tr>
                     <th>Hostname</th>
@@ -45,43 +54,114 @@
                     <!--<td contenteditable="true" name="hostname">{{ item.hostname.hostname }}</td>-->
                 </tr>
                 <tr>
+                    <th>Mail Exchange</th>
+                    <td><input name="mex" type="text" placeholder="Mail Exchange goes here" class="form-control" value="{{ item.mail_exchange }}"></td>
+                </tr>
+                <tr>
                     <th>Aliases</th>
                     <td><input name="alias" type="text" placeholder="Aliases go here" class="form-control" value="{{ item.hostname.aliases }}"></td>
                     <!--<td contenteditable="true" name="aliases">{{ item.hostname.aliases }}</td>-->
                 </tr>
                 <tr>
-                    <th>Location</th>
+                    <th>Building</th>
                     <td>{{ item.building.name }}</td>
                 </tr>
                 <tr>
-                    <th>Manufacturer/Model</th>
-                    <td contenteditable="true">{{ item.manufacturer_model }}</td>
-                </tr>
-                <tr>
-                    <th>Description</th>
-                    <td><input name="desc" type="text" placeholder="Description goes here" class="form-control" value="{{ item.description }}"></td>
+                    <th>Room</th>
+                    <td><input name="room" type="text" placeholder="Room goes here" class="form-control" value="{{ item.room }}"></td>
                     <!--<td contenteditable="true" name="vttag">{{ item.vt_tag }}</td> -->
                 </tr>
                 <tr>
-                    <th>VT Tag</th>
-                    <td><input name="vttag" type="text" placeholder="VT tag goes here" class="form-control" value="{{ item.vt_tag }}"></td>
+                    <th>Manufacturer/Model</th>
+                    <td contenteditable="false">{{ item.manufacturer_model }}</td>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                    <!--<td><input name="status" type="text" placeholder="Status goes here" class="form-control" value="{{ item.status }}"></td>-->
+                    <td><select name = "status">
+                        <option value = "{{ item.status }}" selected>{{ item.status }}</option>
+                        <option value = "In Use">In Use</option>
+                        <option value = "In Storage">In Storage</option>
+                        <option value = "On Loan">On Loan</option>
+                        <option value = "Damaged">Damaged</option>
+                        <option value = "Missing">Missing</option>
+                        <option value = "Surplused">Surplused</option>
+                        <option value = "Transferred">Transferred</option>
+                        <option value = "Written Off Orphaned">Written Off Orphaned</option>
+                    </select></td>
+                    <!--<td contenteditable="true" name="vttag">{{ item.vt_tag }}</td> -->
+                </tr>
+                <tr>
+                    <th>Serial Number</th>
+                    <td><input name="serial" type="text" placeholder="Serial Number goes here" class="form-control" value="{{ item.serial_number }}"></td>
+                    <!--<td contenteditable="true" name="vttag">{{ item.vt_tag }}</td> -->
+                </tr>
+                <tr>
+                    <th>Classification</th>
+                    <!--<td><input name="class" type="text" placeholder="Classification goes here" class="form-control" value="{{ item.classification }}"></td> -->
+                        <td><select name = "class">
+                            <option value = "{{ item.classification }}" selected>{{ item.classification }}</option>
+                            <option value = "Laptop">Laptop</option>
+                            <option value = "Desktop">Desktop</option>
+                            <option value = "Other">Other</option>
+                        </select></td>
+                    
+                    <!--<td contenteditable="true" name="vttag">{{ item.vt_tag }}</td> -->
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td><textarea name="desc" id="desc" cols="30" rows="3">{{ item.description }}</textarea></td>
+                    <!--<td><input name="desc" type="text" placeholder="Description goes here" class="form-control" value="{{ item.description }}"></td>-->
                     <!--<td contenteditable="true" name="vttag">{{ item.vt_tag }}</td> -->
                 </tr>
                 <tr>
                     <th>IPv4</th>
+                    {% if item.hostname.ipv4 %}
+                    <td>{{ item.hostname.ipv4.address }}</td>
+                    {% else %}
                     <td>{{ item.hostname.ipv4.address }} &nbsp; &nbsp; &nbsp;<a href="/IPv4/{{item.building.id}}/{{item.id}}"><button id="ipv4-btn" class="btn btn-outline-secondary" type="button">
                         Generate IPv4
                     </button></a></td>
+                    {% endif %}
                 </tr>
                 <tr>
                     <th>IPv6</th>
+                    {% if item.hostname.ipv6 %}
+                    <td>{{ item.hostname.ipv6.address }} </td>
+                    {% else %}
                     <td>{{ item.hostname.ipv6.address }} &nbsp; &nbsp; &nbsp;<a href="/IPv6/{{item.building.id}}/{{item.id}}"><button id="ipv6-btn" class="btn btn-outline-secondary" type="button">
                         Generate IPv6
                     </button></a></td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <th>Purchase Order</th>
+                    <td><input name="porder" type="text" placeholder="Purchase order goes here" class="form-control" value="{{ item.purchase_order }}"></td>
+                </tr>
+                <tr>
+                    <th>Purchase Date</th>
+                    {% if item.purchase_date %}
+                    <td>{{ item.purchase_date }}</td>
+                    {% else %}
+                    <td><input name="pdate" type="text" placeholder="Format: YYYY-MM-DD" required pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" class="form-control" value=""></td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <th>Purchase Value</th>
+                    <td><input name="pvalue" type="text" placeholder="Format: $1111.11" class="form-control" value="${{ item.purchase_value }}"></td>
+                </tr>
+                <tr>
+                    <th>Acquisition Date</th>
+                    {% if item.acquisition_date %}
+                    <td>{{ item.acquisition_date }}</td>
+                    {% else %}
+                    <td><input name="aquidate" type="text" placeholder="Format: YYYY-MM-DD" class="form-control" value="{{ item.acquisition_date }}"></td>
+                    {% endif %}
                 </tr>
                 <tr>
                     <th>Notes</th>
-                    <td><input name="notes" type="text" placeholder="Include Notes here" class="form-control" value="{{ item.notes }}"></td>
+                    <td><textarea name="notes" id="notes" cols="30" rows="5">{{ item.notes }}</textarea></td>
+                    <!--<td><input name="notes" type="text" placeholder="Include Notes here" class="form-control" value="{{ item.notes }}"></td> -->
                     <!--<td contenteditable="true" name="notes">{{ item.notes }}</th> -->
                 </tr>
             </tbody>
