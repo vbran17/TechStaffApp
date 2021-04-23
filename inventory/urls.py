@@ -2,11 +2,13 @@
 from django.urls import path
 from . import views
 from django.conf.urls import include
+from django.views.generic.base import RedirectView
 
 app_name = 'inventory'
 
 urlpatterns = [
     path('login/', views.login_view, name='login'),
+    path('', RedirectView.as_view(url='http://localhost:8000/login/'), name='login-redirect'),
     path('home/', views.home_view, name='home'),
     path('home/DNS_Form/', views.dns_view, name='dns'),
     path('admin/auth/admin_view', views.admin_view, name='admin'),
