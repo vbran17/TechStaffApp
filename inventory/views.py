@@ -18,7 +18,8 @@ from .forms import EquipmentForm, HostnameForm, BuildingForm, IPRangeForm
 from django.core import serializers
 from django.contrib import messages
 
-from django.http import HttpResponse, JsonResponse
+
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from .forms import *
 from django.core import serializers
 from django.contrib import messages
@@ -248,18 +249,36 @@ def IPDash(request):
                     fixed = sets[0] + sets[1] + sets[2]
                     fixed = ".".join(fixed) + "."
                     if b_sets[:3] == e_sets[:3] and e_sets[3] >= b_sets[3]:
-                        for i in range(b_sets[3], e_sets[3]):
+                        ip_count = 0
+                        missed = []
+                        for i in range(b_sets[3], e_sets[3] + 1):
                             address = fixed + str(i)
-                            IP.objects.create(
-                                building=selected_building,
-                                address=address,
-                                in_use=False)        
+                            if IP.objects.filter(address=address).count() > 0:
+                                missed.append(str(i))
+                            else:
+                                IP.objects.create(
+                                    building=selected_building,
+                                    address=address,
+                                    in_use=False)  
+                                ip_count = ip_count + 1
+                        if ip_count > 0:
+                            messages.add_message(request, messages.SUCCESS, str(ip_count) + " IPv4(s) submitted!")
+                        if len(missed) > 0:
+                            duplicate_sets =  ",".join(missed)
+                            messages.add_message(request, messages.ERROR, "Duplicates found: " + fixed + " (" + duplicate_sets + ")")
+                    else:
+                        messages.add_message(request, messages.ERROR, "First three 8-bit numbers should be equal for range")
                 else:
-                    IP.objects.create(
-                        building=selected_building,
-                        address=ip_or_range_start,
-                        in_use=False)
-                messages.add_message(request, messages.SUCCESS, "IPv4(s) submitted!")
+                    if IP.objects.filter(address=ip_or_range_start).count() > 0:
+                        messages.add_message(request, messages.ERROR, "Address: " + ip_or_range_start + " already in DB")
+                    else:
+                        IP.objects.create(
+                            building=selected_building,
+                            address=ip_or_range_start,
+                            in_use=False)
+                        messages.add_message(request, messages.SUCCESS, "IPv4 submitted!")
+                
+                return HttpResponseRedirect("/ipdashboard")
             else:
                 messages.add_message(request, messages.WARNING, context['ip_range_form'].errors)
                     
