@@ -48,7 +48,6 @@ class HostnameForm(ModelForm):
     class Meta:
         model = Hostname
         fields = ['hostname', 'building', 'ipv4', 'ipv6', 'aliases']
-        building = forms.ModelChoiceField(queryset=Building.objects.all(), empty_label="--Select a building--")
 
 #for IP Form?
 class IPRangeForm(forms.Form):

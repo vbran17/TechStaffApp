@@ -70,7 +70,7 @@ def gen_ipv6(request, b_name, item_id):
         ipv6.building = building[0]
         ipv6.ip_type = "I6"
         ipv6.in_use = True
-        address = building[0].ipv6_prefix + "1111:1111:1113"
+        address = building[0].ipv6_prefix + "::1111:1111:1113"
         print(address)
         ipv6.address = address
         ipv6.save()
@@ -233,7 +233,10 @@ def IPDash(request):
         if request.POST.get('buildingsubmit'):
             if context['building_form'].is_valid():
                 context['building_form'].save()
+        if request.POST.get('genipv6'):
+            print("generate ipv6")
         if request.POST.get('hostnamesubmit'):
+            
             if context['hostname_form'].is_valid():
                 context['hostname_form'].save()
 
@@ -247,7 +250,7 @@ def IPDash(request):
                     b_sets = list(map(int,sets))
                     e_sets = list(map(int,(context['ip_range_form'].cleaned_data['ip_range_end']).split(".")))
                     fixed = sets[0] + sets[1] + sets[2]
-                    fixed = ".".join(fixed) + "."
+                    fixed = ".".join(sets[:3]) + "."
                     if b_sets[:3] == e_sets[:3] and e_sets[3] >= b_sets[3]:
                         ip_count = 0
                         missed = []

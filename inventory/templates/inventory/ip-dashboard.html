@@ -9,7 +9,7 @@
   <div class="submit-row" style="padding-right: 10px;">
     <button id="officeButton" class="btn btn-outline-secondary" type="button" style="width: 150px;">Add Building</button>
     <button id="hostnameButton" class="btn btn-outline-secondary" type="button" style="width: 150px;">Add Hostname</button>
-    <button id="addIPsButton" class="btn btn-outline-secondary" type="button" style="width: 150px;">Add IPs</button>
+    <button id="addIPsButton" class="btn btn-outline-secondary" type="button" style="width: 150px;">Add IPv4s</button>
   </div>
 </nav>
 
@@ -72,7 +72,14 @@
           {% for field in hostname_form.visible_fields %}
           <tr>
             <td>{{field.label_tag}}</td>
+            {% if field.name == "ipv6" %}
+            <td>
+             
+              <input id="genipv6" name="genipv6" type="submit" value="generate" class="btn-sm"/>
+            </td>
+            {% else %}
             <td>{{field}}</td>
+            {% endif %}
           </tr>
           {% endfor %}
         </tbody>
@@ -92,7 +99,7 @@
       <table class="table table-responsive">
           <thead>
               <tr>
-                  <th id="title" colspan="2" style="text-align: center; font-size: xx-large;">Add IP Range</th>
+                  <th id="title" colspan="2" style="text-align: center; font-size: xx-large;">Add IPv4 Range</th>
               </tr>
           </thead>
           <tbody>
