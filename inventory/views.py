@@ -233,14 +233,21 @@ def IPDash(request):
         if request.POST.get('buildingsubmit'):
             if context['building_form'].is_valid():
                 context['building_form'].save()
-        if request.POST.get('genipv6'):
-            print("generate ipv6")
-        if request.POST.get('hostnamesubmit'):
-            
+        elif request.POST.get('hostnamesubmit'):
             if context['hostname_form'].is_valid():
-                context['hostname_form'].save()
-
-        if request.POST.get('iprangesubmit'):
+                print("hostname form is valid")
+                selected_building = context['hostname_form'].cleaned_data['building']
+                new_author = context['hostname_form'].save(commit=False)   
+                host_ipv6 = request.POST.get('ip_range_begin')
+                ipv6_obj = IP.objects.create(
+                    building=selected_building,
+                    address=host_ipv6,
+                    ip_type=IP.IPv6,
+                    in_use=True)
+                new_author.ipv6 = ipv6_obj
+                new_author.in_use = False
+                new_author.save()
+        elif request.POST.get('iprangesubmit'):
             if context['ip_range_form'].is_valid():
                 selected_building = context['ip_range_form'].cleaned_data['building']
                 ip_or_range_start = context['ip_range_form'].cleaned_data['ip_range_begin']
@@ -297,6 +304,16 @@ def IPDash(request):
 
 def getBuilding(request):
     print("in building method")
+    if request.method == "GET" and request.is_ajax():
+        buildings = Building.objects.all().values_list('name').distinct()
+        buildings = [i[0] for i in list(buildings)]
+        data = {
+            "buildings": buildings,
+        }
+        return JsonResponse(data, status=200)
+
+def getIPv6(request):
+    print("in getIPv6 method")
     if request.method == "GET" and request.is_ajax():
         buildings = Building.objects.all().values_list('name').distinct()
         buildings = [i[0] for i in list(buildings)]

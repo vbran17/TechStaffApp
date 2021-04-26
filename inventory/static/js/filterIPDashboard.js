@@ -27,11 +27,11 @@ $(document).ready(function () {
 
     $('genipv6').on('click', function () {
         //generate ipv6 string
-        let building = document.getElementById('id_building').value
+        //let building = document.getElementById('id_building').value
 
-        if (building == "")
+        //if (building == "")
 
-
+        console.log("hello")
 
 
 

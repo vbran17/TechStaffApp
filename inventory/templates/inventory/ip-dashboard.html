@@ -71,13 +71,14 @@
         <tbody>
           {% for field in hostname_form.visible_fields %}
           <tr>
-            <td>{{field.label_tag}}</td>
             {% if field.name == "ipv6" %}
+            <td>Ipv6:</td>
             <td>
-             
-              <input id="genipv6" name="genipv6" type="submit" value="generate" class="btn-sm"/>
+              {{ip_range_form.ip_range_begin}}
+              <input id="genipv6" name="genipv6" type="button" value="generate" class="btn-sm"/>
             </td>
             {% else %}
+            <td>{{field.label_tag}}</td>
             <td>{{field}}</td>
             {% endif %}
           </tr>

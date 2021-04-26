@@ -14,6 +14,7 @@ urlpatterns = [
     path('admin/auth/admin_view', views.admin_view, name='admin'),
     path('ipdashboard/', views.IPDash, name="ipdashboard"),
     path('ajax/buildings/', views.getBuilding, name = 'get_building'),
+    path('ajax/ipv6/', views.getBuilding, name = 'get_building'),
     path('itemdetails/<int:item_id>/', views.itemdetails_view, name='itemdetails'),
     path('itemdetails/<int:item_id>/delete/', views.item_delete, name='item_delete'),
     path('addequipment/', views.addequipment_view, name='addequipment'),
