@@ -153,6 +153,7 @@ def apply_changes(request, item_id):
         messages.info(request, "Equipment not found")
         print("Equpiment not found")
     return redirect('/itemdetails/%i/' % item_id)
+
 def gen_ipv4(request, b_name, item_id):
     ipv4 = IP.objects.filter(building=b_name,in_use=False, ip_type='I4')
     if len(ipv4) > 0:
@@ -219,49 +220,45 @@ def admin_view(request):
     return render(request, 'inventory/admin.html', context)
 
 
-def ipdash_view(request):
-    building_objects = Building.objects.all()
-    IP_objects = IP.objects.all()
-    context = {
-        'building_objects': building_objects,
-        'IPs': IP_objects
-    }
-    return render(request, 'inventory/ip-dashboard.html', context)
 
+# class IPListing(ListAPIView):
+#     serializer_class = IPSerializers
+#     bserializer_class = BuildingSerializers
 
+#     def get_queryset(self):
+#         ip_list = IP.objects.all()
+#         building = self.request.query_params.get('building', None)
+#         in_use = self.request.query_params.get('in_use', None)
+#         search = self.request.query_params.get('search', None)
 
-class IPListing(ListAPIView):
-    serializer_class = IPSerializers
-    bserializer_class = BuildingSerializers
+#         if building:
+#             ip_list = ip_list.filter(building__name=building)
+#         if in_use:
+#             if in_use == "AssignedIPV4":
+#                 ip_list = ip_list.filter(in_use=True).filter(ip_type="I4")
+#                 print(ip_list)
+#             elif in_use == "UnassignedIPV4":
+#                 ip_list = ip_list.filter(in_use=False).filter(ip_type="I4")
+#             elif in_use == "AssignedIPV6":
+#                 ip_list = ip_list.filter(in_use=True).filter(ip_type="I6")
+#         if search:
+#             if(ip_list.count() > 0):
+#                 if(ip_list.filter(building__name__icontains=search).count() != 0):
+#                     ip_list = ip_list.filter(building__name__icontains=search)
+#                 elif(ip_list.filter(address__icontains=search).count() != 0):
+#                     ip_list = ip_list.filter(address__icontains=search)
+#                 elif(ip_list.filter(ip_type__icontains=search).count() != 0):
+#                     ip_list = ip_list.filter(ip_type__icontains=search)
+#                 else:
+#                     ip_list = []
+#         return ip_list
 
-    def get_queryset(self):
-        ip_list = IP.objects.all()
-        building = self.request.query_params.get('building', None)
-        in_use = self.request.query_params.get('in_use', None)
-        search = self.request.query_params.get('search', None)
+def ipdetails_view(request, ip_id):
+    ip_item = int(ip_id)
+    ip_list = IP.objects.filter(id=ip_item)
+    ip = ip_list[0]
 
-        if building:
-            ip_list = ip_list.filter(building__name=building)
-        if in_use:
-            if in_use == "AssignedIPV4":
-                ip_list = ip_list.filter(in_use=True).filter(ip_type="I4")
-                print(ip_list)
-            elif in_use == "UnassignedIPV4":
-                ip_list = ip_list.filter(in_use=False).filter(ip_type="I4")
-            elif in_use == "AssignedIPV6":
-                ip_list = ip_list.filter(in_use=True).filter(ip_type="I6")
-        if search:
-            if(ip_list.count() > 0):
-                if(ip_list.filter(building__name__icontains=search).count() != 0):
-                    ip_list = ip_list.filter(building__name__icontains=search)
-                elif(ip_list.filter(address__icontains=search).count() != 0):
-                    ip_list = ip_list.filter(address__icontains=search)
-                elif(ip_list.filter(ip_type__icontains=search).count() != 0):
-                    ip_list = ip_list.filter(ip_type__icontains=search)
-                else:
-                    ip_list = []
-        return ip_list
-
+    return render(request, 'inventory/ipdetails.html', {'ip': ip})
 
 def IPDash(request):
     context = { }
@@ -295,7 +292,6 @@ def IPDash(request):
                             in_use=False)
 
     return render(request, "inventory/ip-dashboard.html", context)
-
 
 def getBuilding(request):
     print("in building method")
