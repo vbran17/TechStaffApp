@@ -291,15 +291,9 @@ def IPDash(request):
                 return HttpResponseRedirect("/ipdashboard")
             else:
                 messages.add_message(request, messages.WARNING, context['ip_range_form'].errors)
-                    
-                    
-
-
-
         if request.POST.get('IP_ID'):
             value = request.POST['IP_ID']
             IP.objects.get(id=value).delete()
-
     return render(request, "inventory/ip-dashboard.html", context)
 
 def getBuilding(request):

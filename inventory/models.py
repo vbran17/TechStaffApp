@@ -22,7 +22,7 @@ class IP(models.Model):
         (IPv6, "IPv6"),
     ]
     building = models.ForeignKey(Building, on_delete=models.RESTRICT, blank=True, verbose_name="Building")
-    ip_type = models.CharField(choices=ip_types, max_length=2, default=IPv4, verbose_name="IP type")
+    ip_type = models.CharField(choices=ip_types, max_length=4, default=IPv4, verbose_name="IP type")
     address = models.CharField(max_length=40, blank=True, verbose_name="Address")
     date = models.DateField(auto_now_add=True, blank=True, verbose_name="Date")
     in_use = models.BooleanField(verbose_name="In use")
