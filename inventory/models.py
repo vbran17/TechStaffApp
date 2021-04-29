@@ -22,7 +22,7 @@ class IP(models.Model):
         (IPv6, "IPv6"),
     ]
     building = models.ForeignKey(Building, on_delete=models.RESTRICT, blank=True, verbose_name="Building")
-    ip_type = models.CharField(choices=ip_types, max_length=4, default=IPv4, verbose_name="IP type")
+    ip_type = models.CharField(choices=ip_types, max_length=5, default=IPv4, verbose_name="IP type")
     address = models.CharField(max_length=40, blank=True, verbose_name="Address")
     date = models.DateField(auto_now_add=True, blank=True, verbose_name="Date")
     in_use = models.BooleanField(verbose_name="In use")
@@ -37,6 +37,8 @@ class Hostname(models.Model):
     ipv4 = models.ForeignKey(IP, on_delete=models.RESTRICT, blank=True, related_name="HostnameIPv4", verbose_name="IPv4")
     ipv6 = models.ForeignKey(IP, on_delete=models.RESTRICT, blank=True, related_name="HostnameIPv6", verbose_name="IPv6")
     in_use = models.BooleanField(verbose_name="In Use")
+    def __str__(self):
+        return self.hostname
 
 class Equipment(models.Model):
     vt_tag = models.CharField(max_length=255, blank=True, verbose_name="VT tag")

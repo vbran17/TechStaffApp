@@ -230,25 +230,21 @@ def IPDash(request):
     context['Hosts'] = Hostname.objects.all()
 
     if request.method == 'POST':
-        if request.POST.get('buildingsubmit'):
+        if request.POST.get('IP_ID'):
+            value = request.POST['IP_ID']
+            IP.objects.get(id=value).delete()
+            messages.add_message(request, messages.SUCCESS, str(value) + "IP deleted")
+        elif request.POST.get('buildingsubmit'):
             if context['building_form'].is_valid():
-                context['building_form'].save()
-        elif request.POST.get('hostnamesubmit'):
-            if context['hostname_form'].is_valid():
-                print("hostname form is valid")
-                selected_building = context['hostname_form'].cleaned_data['building']
-                new_author = context['hostname_form'].save(commit=False)   
-                host_ipv6 = request.POST.get('ip_range_begin')
-                ipv6_obj = IP.objects.create(
-                    building=selected_building,
-                    address=host_ipv6,
-                    ip_type=IP.IPv6,
-                    in_use=True)
-                new_author.ipv6 = ipv6_obj
-                new_author.in_use = False
-                new_author.save()
+                if Building.objects.filter(name=context['building_form'].cleaned_data['name']).count() > 0:
+                    messages.add_message(request, messages.ERROR, "Building: " + context['building_form'].cleaned_data['name'] + " already in DB")
+                else:
+                    context['building_form'].save()
+                    messages.add_message(request, messages.SUCCESS, "Building added!")
+                return HttpResponseRedirect("/ipdashboard")
         elif request.POST.get('iprangesubmit'):
             if context['ip_range_form'].is_valid():
+                print("Entered ip range form case")
                 selected_building = context['ip_range_form'].cleaned_data['building']
                 ip_or_range_start = context['ip_range_form'].cleaned_data['ip_range_begin']
 
@@ -286,14 +282,31 @@ def IPDash(request):
                             building=selected_building,
                             address=ip_or_range_start,
                             in_use=False)
+                        print("Successful add of IPV4")
                         messages.add_message(request, messages.SUCCESS, "IPv4 submitted!")
                 
                 return HttpResponseRedirect("/ipdashboard")
             else:
                 messages.add_message(request, messages.WARNING, context['ip_range_form'].errors)
-        if request.POST.get('IP_ID'):
-            value = request.POST['IP_ID']
-            IP.objects.get(id=value).delete()
+        elif request.POST.get('hostnamesubmit'):
+            if context['hostname_form'].is_valid():
+                if Hostname.objects.filter(hostname=context['hostname_form'].cleaned_data['hostname']).count() > 0:
+                    messages.add_message(request, messages.ERROR, "Hostname: " + context['hostname_form'].cleaned_data['hostname'] + " already in DB")
+                else:
+                    selected_building = context['hostname_form'].cleaned_data['building']
+                    new_author = context['hostname_form'].save(commit=False)   
+                    host_ipv6 = request.POST.get('ip_range_begin')
+                    ipv6_obj = IP.objects.create(
+                        building=selected_building,
+                        address=host_ipv6,
+                        ip_type=IP.IPv6,
+                        in_use=True)
+                    new_author.ipv6 = ipv6_obj
+                    new_author.in_use = False
+                    new_author.save()
+                    messages.add_message(request, messages.SUCCESS, "Hostname added!")
+            return HttpResponseRedirect("/ipdashboard")        
+
     return render(request, "inventory/ip-dashboard.html", context)
 
 def getBuilding(request):
