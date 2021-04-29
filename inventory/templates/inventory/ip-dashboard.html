@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
+{% include 'inventory/ip-dashboard-modal.html' %}
 {% load static %}
 {% block content %}
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+/>
 <link
   rel="stylesheet"
   type="text/css"
@@ -197,15 +202,14 @@
               </button>
             {% endif %}
 
+            <a href="#" data-target="#deleteModal" data-toggle="modal" data-id="{{ip.id}}" class="deleteClass">
             <button
               type="button"
-              class="btn btn-primary"
-              data-toggle="modal"
-              data-target="#delete"
+              class="btn btn-primary confirm-delete"
               style="width: 100px; text-align: center;"
               >
               Delete
-              </button>
+              </button></a>
           </td>
         </tr>
       {% endfor %}
@@ -214,59 +218,20 @@
   </div>
 </div>
 
-
-<!-- Modals -->
-<div class="modal fade" id="unassignip" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <form method="post">
         {% csrf_token %}
         <div class="modal-body">
-          <p>Warning: Unassigning the selected IP will remove the assication with its hostname.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">
-            Close
-          </button>
-          <input type="submit" value="Unassign IP" class="btn btn-primary" />
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<!-- <div class="modal fade" id="assignip" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <form method="post">
-        {% csrf_token %}
-        <div class="modal-body">
+          <input type="text" name="IP_ID" id=IP_ID value=""/>
           <p>Please confirm that you would like to assign the selected IP.</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
             Close
           </button>
-          <input type="submit" value="Unassign IP" class="btn btn-primary" />
-        </div>
-      </form>
-    </div>
-  </div>
-</div> -->
-
-<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <form method="post">
-        {% csrf_token %}
-        <div class="modal-body">
-          <p>Warning: deleting the selected IP will remove the association with its hostname and remove it from the database.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">
-            Close
-          </button>
-          <input type="submit" value="Delete IP" class="btn btn-primary" />
+          <input type="submit" value="Delete" class="btn btn-primary" />
         </div>
       </form>
     </div>
@@ -277,8 +242,12 @@
   $(document).ready(function () {
     $('#list_data').DataTable();
     $('.dataTables_length').addClass('bs-select');
-});
+  });
+
+  $('.deleteClass').on('click', function() {
+    var my_id_value = $(this).data('id');
+    $(".modal-body #IP_ID").val(my_id_value);
+  });
+  
 </script>
-
-
 {% endblock %}

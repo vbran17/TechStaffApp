@@ -17,7 +17,7 @@ from django.http import HttpResponse, JsonResponse
 from .forms import EquipmentForm, HostnameForm, BuildingForm, IPRangeForm
 from django.core import serializers
 from django.contrib import messages
-
+from bootstrap_modal_forms.generic import BSModalCreateView
 
 from django.http import HttpResponse, JsonResponse
 from .forms import *
@@ -220,7 +220,6 @@ def admin_view(request):
     return render(request, 'inventory/admin.html', context)
 
 
-
 # class IPListing(ListAPIView):
 #     serializer_class = IPSerializers
 #     bserializer_class = BuildingSerializers
@@ -253,12 +252,13 @@ def admin_view(request):
 #                     ip_list = []
 #         return ip_list
 
-def ipdetails_view(request, ip_id):
-    ip_item = int(ip_id)
+
+def ip_delete(request, pk):
+    ip_item = int(pk)
     ip_list = IP.objects.filter(id=ip_item)
     ip = ip_list[0]
 
-    return render(request, 'inventory/ipdetails.html', {'ip': ip})
+    return render(request, 'inventory/ip-dashboard-modal.html', {'ip': ip})
 
 def IPDash(request):
     context = { }
@@ -290,6 +290,11 @@ def IPDash(request):
                             building=selected_building,
                             address=block,
                             in_use=False)
+
+        if request.POST.get('IP_ID'):
+            value = request.POST['IP_ID']
+            IP.objects.get(id=value).delete()
+            print(value)
 
     return render(request, "inventory/ip-dashboard.html", context)
 
