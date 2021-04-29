@@ -17,7 +17,6 @@ from django.http import HttpResponse, JsonResponse
 from .forms import EquipmentForm, HostnameForm, BuildingForm, IPRangeForm
 from django.core import serializers
 from django.contrib import messages
-from bootstrap_modal_forms.generic import BSModalCreateView
 
 from django.http import HttpResponse, JsonResponse
 from .forms import *
