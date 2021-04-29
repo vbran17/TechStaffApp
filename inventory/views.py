@@ -31,17 +31,17 @@ from django.forms import formset_factory
 def home_view(request):
     # Handles search query
     context = {}
-    context['options'] = {"VT Tag": "vttag", "CS Tag": "cstag", "Serial Number": "serial_number",
-                          "Manufacturer": "manufacturer_model", "Custodian": "custodian", "Hostname": "hostname",
-                          "Building": "building", "IP": "ip"}
-    query = ""
-    selected_option = ""
+    #context['options'] = {"VT Tag": "vttag", "CS Tag": "cstag", "Serial Number": "serial_number",
+    #                      "Manufacturer": "manufacturer_model", "Custodian": "custodian", "Hostname": "hostname",
+    #                      "Building": "building", "IP": "ip"}
+    #query = ""
+    #selected_option = ""
     if request.method == "GET":
         query = request.GET.get('search')
         selected_option = request.GET.get('search_options')
         context["query"] = query
         context["selected_option"] = selected_option
-    context['equipments'] = get_equipment_queryset(query, selected_option)
+    context['equipments'] = Equipment.objects.all()
     return render(request, 'inventory/home.html', context)
 
 
@@ -199,17 +199,23 @@ def admin_view(request):
     context["InventoryUserForm"] = InventoryUserForm(request.POST or None)
     #UserFormset = formset_factory(context["UserForm"])
     #InventoryUserFormset = formset_factory(context["InventoryUserForm"])
+    print(request.method)
+    print(request)
     if request.method == "POST":
-        print("gets heres")
-        #print(UserFormset.errors)
-        print(context["InventoryUserForm"].errors)
-        print(context["UserForm"].errors)
-        if context["UserForm"].is_valid() and context["InventoryUserForm"].is_valid():
+        if request.POST.get('userID'):
+            User.objects.filter(id=request.POST.get('userID')).delete()
+            print("|"+request.POST.get('userID')+"|")
+            print("gets heres")
+            #print(UserFormset.errors)
+            print(context["InventoryUserForm"].errors)
+            print(context["UserForm"].errors)
+        elif context["UserForm"].is_valid() and context["InventoryUserForm"].is_valid():
             user = context["UserForm"].save()
             inventory_user = context["InventoryUserForm"].save(commit=False)
             inventory_user.user = user
             inventory_user.save()
             print("gets heres")
+
     return render(request, 'inventory/admin.html', context)
 
 
