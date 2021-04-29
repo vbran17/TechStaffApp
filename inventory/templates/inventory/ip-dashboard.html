@@ -169,7 +169,6 @@
           <th scope="row">{{ ip.address }}</th>
           <td>{{ ip.ip_type }}</td>
           <td>{{ ip.building.name }}</td>
-
           {% if ip.ip_type == "IPv4" %}
             {% for host in ip.HostnameIPv4.all %}
                 <td> {{ host.hostname }} </td>
@@ -184,9 +183,6 @@
                 <td> Hostname Not Assigned </td>
             {% endfor %}
           {% endif %}
-
-
-
           <td>{{ ip.in_use }}</td>
           <td>
             <a href="#" data-target="#deleteModal" data-toggle="modal" data-id="{{ip.id}}" class="deleteClass">
