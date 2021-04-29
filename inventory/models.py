@@ -21,7 +21,6 @@ class IP(models.Model):
         (IPv4, "IPv4"),
         (IPv6, "IPv6"),
     ]
-<<<<<<< HEAD
     building = models.ForeignKey(Building, on_delete=models.RESTRICT, blank=True, verbose_name="Building")
     ip_type = models.CharField(choices=ip_types, max_length=2, default=IPv4, verbose_name="IP type")
     address = models.CharField(max_length=40, blank=True, verbose_name="Address")
@@ -29,13 +28,6 @@ class IP(models.Model):
     in_use = models.BooleanField(verbose_name="In use")
     def __str__(self):
         return self.address
-=======
-    building = models.ForeignKey(Building, on_delete=models.RESTRICT, blank=True)
-    ip_type = models.CharField(choices=ip_types, max_length=4, default=IPv4)
-    address = models.CharField(max_length=40, blank=True)
-    date = models.DateField(auto_now_add=True, blank=True)
-    in_use = models.BooleanField()
->>>>>>> bleh
 
 
 class Hostname(models.Model):
