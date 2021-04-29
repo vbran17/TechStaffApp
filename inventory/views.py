@@ -219,47 +219,6 @@ def admin_view(request):
 
     return render(request, 'inventory/admin.html', context)
 
-
-# class IPListing(ListAPIView):
-#     serializer_class = IPSerializers
-#     bserializer_class = BuildingSerializers
-
-#     def get_queryset(self):
-#         ip_list = IP.objects.all()
-#         building = self.request.query_params.get('building', None)
-#         in_use = self.request.query_params.get('in_use', None)
-#         search = self.request.query_params.get('search', None)
-
-#         if building:
-#             ip_list = ip_list.filter(building__name=building)
-#         if in_use:
-#             if in_use == "AssignedIPV4":
-#                 ip_list = ip_list.filter(in_use=True).filter(ip_type="I4")
-#                 print(ip_list)
-#             elif in_use == "UnassignedIPV4":
-#                 ip_list = ip_list.filter(in_use=False).filter(ip_type="I4")
-#             elif in_use == "AssignedIPV6":
-#                 ip_list = ip_list.filter(in_use=True).filter(ip_type="I6")
-#         if search:
-#             if(ip_list.count() > 0):
-#                 if(ip_list.filter(building__name__icontains=search).count() != 0):
-#                     ip_list = ip_list.filter(building__name__icontains=search)
-#                 elif(ip_list.filter(address__icontains=search).count() != 0):
-#                     ip_list = ip_list.filter(address__icontains=search)
-#                 elif(ip_list.filter(ip_type__icontains=search).count() != 0):
-#                     ip_list = ip_list.filter(ip_type__icontains=search)
-#                 else:
-#                     ip_list = []
-#         return ip_list
-
-
-def ip_delete(request, pk):
-    ip_item = int(pk)
-    ip_list = IP.objects.filter(id=ip_item)
-    ip = ip_list[0]
-
-    return render(request, 'inventory/ip-dashboard-modal.html', {'ip': ip})
-
 def IPDash(request):
     context = { }
     context['hostname_form'] = HostnameForm(request.POST or None)
@@ -267,6 +226,7 @@ def IPDash(request):
     context['ip_range_form'] = IPRangeForm(request.POST or None)
     context['building_objects'] = Building.objects.all()
     context['IPS'] = IP.objects.all()
+    context['Hosts'] = Hostname.objects.all()
 
     if request.method == 'POST':
         if request.POST.get('buildingsubmit'):
@@ -294,7 +254,6 @@ def IPDash(request):
         if request.POST.get('IP_ID'):
             value = request.POST['IP_ID']
             IP.objects.get(id=value).delete()
-            print(value)
 
     return render(request, "inventory/ip-dashboard.html", context)
 
@@ -317,8 +276,6 @@ def ipdash_view_filter(request):
         'IPs': IP_objects
     }
     return render(request, 'inventory/ip-dashboard.html', context)
-
-
 
 def itemdetails_view(request, item_id):
     # run a query to get all the info for the item_id

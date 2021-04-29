@@ -31,9 +31,6 @@ function closeHostname() {
 	document.getElementById("hostname-divider").style.display ="none";
 }
 
-var assign = document.querySelector("#assignIP");
-assign.addEventListener('click', openHostname);
-
 document.getElementById('hostnameButton').addEventListener('click', openHostname);
 document.getElementById('cancelHost').addEventListener('click', closeHostname);
 

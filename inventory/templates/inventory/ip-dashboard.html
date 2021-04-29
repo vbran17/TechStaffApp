@@ -11,46 +11,13 @@
   type="text/css"
   href="{% static 'mdb/css/addons/datatables.min.css' %}"
 />
-<!-- <link rel="stylesheet" href="{% static 'assets/css/bootstrap.css' %}"> -->
+
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>
 <script src="{% static 'mdb/js/addons/datatables.min.js' %}"></script>
 
 
 <h1 class="d-flex justify-content-center align-items-center">IP Dashboard</h1>
-<div class="row">
-  <form class="d-flex" method="get" >
-    <div class="input-group" style="width: 100%; max-width: 300px; padding-right: 10px;">
-      {% csrf_token %}
-        <div class="input-group-prepend">
-          <label class="input-group-text" for="inputGroupSelect01">Building</label>
-        </div>
-        <select
-          id="search_by_building"
-          class="form-select"
-          name="building_options" url = "{%url 'inventory:get_building' %}">
-         <option value="all">All</option>
-          {% for entry in building_objects %}
-          <option value="{{ entry.id }}">{{ entry.name }}</option>
-          {% endfor %} 
-        </select>
-    </div>
-    <div class="input-group" style="width: 100%; max-width: 300px;">
-        <div class="input-group-prepend">
-          <label class="input-group-text" for="inputGroupSelect01">Views</label>
-        </div>
-        <select
-          id="search_by_options"
-          class="form-select"
-          name="building_options">
-          <option value="all">All</option>
-          <option value="AssignedIPV4">Assigned IPV4s</a></li>
-          <option value="UnassignedIPV4">Unassigned IPV4s</a></li>
-          <option value="AssignedIPV6">Assigned IPV6s</a></li>
-        </select>
-    </div>
-  </form>
-</div>
 
 <nav class="navbar top-navbar navbar-light bg-light px-9 justify-content-center">
   <div class="submit-row" style="padding-right: 10px;">
@@ -144,9 +111,6 @@
 <!-- JavaScript Magic for Popup Menus-->
 {% block script %}
   <script src="{% static 'js/popupMenusIPDashboard.js' %}"></script>
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script> -->
-  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script> -->
   <script src="{% static 'js/filterIPDashboard.js' %}" type="text/javascript"></script>
 {% endblock %}
 
@@ -157,8 +121,6 @@
 </nav>
 
 <!--- Display Area for IP Addresses -->
-<!-- class="table-responsive"  -->
-<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
 <div class="table-responsive">
   <table class="table table-bordered table-responsive table-hover table-striped"
     id="list_data" data-toggle="table">
@@ -178,30 +140,19 @@
           <th scope="row">{{ ip.address }}</th>
           <td>{{ ip.ip_type }}</td>
           <td>{{ ip.building.name }}</td>
-          <td> filler </td>
+
+          {% if ip.ip_type == "IPv4" %}
+            {% for host in ip.HostnameIPv4.all %}
+              <td> {{ host.hostname }} </td>
+            {% endfor %}
+          {% else %}
+            {% for host in ip.HostnameIPv6.all %}
+              <td> {{ host.hostname }} </td>
+            {% endfor %}
+          {% endif %}
+
           <td>{{ ip.in_use }}</td>
           <td>
-            {% if ip.in_use %}
-              <button
-               type="button"
-                class="btn btn-primary"
-                data-toggle="modal"
-                data-target="#unassignip"
-                style="width: 100px; text-align: center;"
-              >
-              Unassign
-              </button>
-            {% else %}
-              <button
-              id="assignIP"
-              type="button"
-              class="btn btn-primary"
-              style="width: 100px; text-align: center;"
-              >
-              Assign
-              </button>
-            {% endif %}
-
             <a href="#" data-target="#deleteModal" data-toggle="modal" data-id="{{ip.id}}" class="deleteClass">
             <button
               type="button"
@@ -224,8 +175,8 @@
       <form method="post">
         {% csrf_token %}
         <div class="modal-body">
-          <input type="text" name="IP_ID" id=IP_ID value=""/>
-          <p>Please confirm that you would like to assign the selected IP.</p>
+          <input type="hidden" name="IP_ID" id=IP_ID value=""/>
+          <p>Please confirm that you would like to delete the selected IP.</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
