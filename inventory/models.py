@@ -34,8 +34,8 @@ class Hostname(models.Model):
     hostname = models.CharField(max_length=255, verbose_name="Hostname")
     building = models.ForeignKey(Building, on_delete=models.RESTRICT, blank=True, verbose_name="Building")
     aliases = models.CharField(max_length=255, blank=True, verbose_name="Aliases")
-    ipv4 = models.ForeignKey(IP, on_delete=models.RESTRICT, blank=True, related_name="HostnameIPv4", verbose_name="IPv4")
-    ipv6 = models.ForeignKey(IP, on_delete=models.RESTRICT, blank=True, related_name="HostnameIPv6", verbose_name="IPv6")
+    ipv4 = models.ForeignKey(IP, on_delete=models.SET_NULL, null=True, blank=True, related_name="HostnameIPv4", verbose_name="IPv4")
+    ipv6 = models.ForeignKey(IP, on_delete=models.SET_NULL, null=True, blank=True, related_name="HostnameIPv6", verbose_name="IPv6")
     in_use = models.BooleanField(verbose_name="In Use")
     def __str__(self):
         return self.hostname

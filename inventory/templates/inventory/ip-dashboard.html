@@ -141,7 +141,6 @@
 <!-- JavaScript Magic for Popup Menus-->
 {% block script %}
   <script src="{% static 'js/popupMenusIPDashboard.js' %}"></script>
-  <script src="{% static 'js/filterIPDashboard.js' %}" type="text/javascript"></script>
 {% endblock %}
 
 <nav class="navbar top-navbar navbar-light bg-light px-9">
@@ -173,13 +172,20 @@
 
           {% if ip.ip_type == "IPv4" %}
             {% for host in ip.HostnameIPv4.all %}
-              <td> {{ host.hostname }} </td>
-            {% endfor %}
+                <td> {{ host.hostname }} </td>
+            {% empty %}
+              <td> Hostname Not Assigned </td>
+            {% endfor %} 
+
           {% else %}
             {% for host in ip.HostnameIPv6.all %}
-              <td> {{ host.hostname }} </td>
+                <td> {{ host.hostname }} </td>
+            {% empty %}
+                <td> Hostname Not Assigned </td>
             {% endfor %}
           {% endif %}
+
+
 
           <td>{{ ip.in_use }}</td>
           <td>
@@ -192,7 +198,7 @@
               Delete
               </button></a>
           </td>
-        </tr>
+        </tr> 
       {% endfor %}
     </tbody>
   </table>
