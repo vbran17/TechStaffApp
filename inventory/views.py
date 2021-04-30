@@ -98,7 +98,6 @@ def gen_ipv6(request, b_name, item_id):
         equip = Equipment.objects.get(id=item_id)
         if equip.hostname:
             print("Hostname specified %s" % equip.hostname.hostname)
-            print(equip.hostname.ipv6.address)
             equip.hostname.ipv6 = ipv6
             #equip.hostname.ipv6.save()
             equip.hostname.save()
@@ -513,8 +512,8 @@ def addequipment_view(request):
         print(form.cleaned_data["hostname"])
         return JsonResponse({"abc": 123})
     '''
-    if form.is_valid():
-        form.save()
+    if context["EquipmentForm"].is_valid():
+        context["EqupimentForm"].save()
         return redirect('/home')
     return render(request, 'inventory/addequipment.html', context)
 
