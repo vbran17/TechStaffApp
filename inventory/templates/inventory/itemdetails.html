@@ -10,13 +10,23 @@
     <!-- Title -->
     <h2 class="d-flex justify-content-center align-items-center" style="padding: 10px; font-size: 40pt; padding-bottom: 50px;">Equipment Page</h2>
 
-{% if messages %}
-    {% for message in messages %}
-    <script>alert("{{ message }}")</script>
-
-    {% endfor %}
-
-{% endif %}
+{% if messages %}{% for message in messages %}
+    {% if message.tags == "success" %}
+      <div class="alert alert-dismissible alert-success">
+        <button type="button" class="close" data-dismiss="alert">
+        ×
+        </button>
+        <strong>{{message}}<strong>
+      </div>
+    {% else %}
+    <div class="alert alert-dismissible alert-danger">
+      <button type="button" class="close" data-dismiss="alert">
+      ×
+      </button>
+      <strong>{{message}}<strong>
+    </div>
+    {% endif %}
+  {% endfor %}{% endif %}
 {% if item is not None %}
 <form method="POST" action="/itemdetails/{{item.id}}/apply_changes/">
     {% csrf_token %}
@@ -31,13 +41,20 @@
             <tbody>
                 <tr>
                     <th>CS Tag</th>
+                    {% if item.cs_tag == ""%}
                     <td><input name="cstag" type="text" placeholder="CS Tag goes here" class="form-control" value="{{ item.cs_tag }}"></td>
-                    
+                    {% else %}
+                    <td>{{ item.cs_tag }}</td>
+                    {% endif %}
                     <!--<td contenteditable="true" name="cstag">{{ item.cs_tag }}</td> -->
                 </tr>
                 <tr>
                     <th>VT Tag</th>
+                    {% if item.vt_tag == ""%}
                     <td><input name="vttag" type="text" placeholder="VT tag goes here" class="form-control" value="{{ item.vt_tag }}"></td>
+                    {% else %}
+                    <td>{{ item.vt_tag }}</td>
+                    {% endif %}
                     <!--<td contenteditable="true" name="vttag">{{ item.vt_tag }}</td> -->
                 </tr>
                 <tr>
@@ -46,7 +63,11 @@
                 </tr>
                 <tr>
                     <th>Departmemt</th>
+                    {% if item.dept == ""%}
                     <td><input name="dept" type="text" placeholder="Departmemt goes here" class="form-control" value="{{ item.dept }}"></td>
+                    {% else %}
+                    <td>{{ item.dept }}</td>
+                    {% endif %}
                 </tr>
                 <tr>
                     <th>Hostname</th>
@@ -55,7 +76,17 @@
                 </tr>
                 <tr>
                     <th>Mail Exchange</th>
-                    <td><input name="mex" type="text" placeholder="Mail Exchange goes here" class="form-control" value="{{ item.mail_exchange }}"></td>
+                    {% if item.mail_exchange %}
+                    <td>{{ item.mail_exchange }}</td>
+                    {% else %}
+                    <td><select name = "mex">
+                        <option value = "" selected>---------</option>
+                        {% for host in hostnames %}
+                        <option value = "{{ host.hostname }}">{{ host }}</option>
+                        {% endfor %}
+                    </select>
+                    {% endif %}
+                    <!--<td><input name="mex" type="text" placeholder="Mail Exchange goes here" class="form-control" value="{{ item.mail_exchange }}"></td>-->
                 </tr>
                 <tr>
                     <th>Aliases</th>
@@ -68,7 +99,11 @@
                 </tr>
                 <tr>
                     <th>Room</th>
+                    {% if item.room == ""%}
                     <td><input name="room" type="text" placeholder="Room goes here" class="form-control" value="{{ item.room }}"></td>
+                    {% else %}
+                    <td>{{ item.room }}</td>
+                    {% endif %}
                     <!--<td contenteditable="true" name="vttag">{{ item.vt_tag }}</td> -->
                 </tr>
                 <tr>
@@ -93,7 +128,11 @@
                 </tr>
                 <tr>
                     <th>Serial Number</th>
+                    {% if item.serial_number == ""%}
                     <td><input name="serial" type="text" placeholder="Serial Number goes here" class="form-control" value="{{ item.serial_number }}"></td>
+                    {% else %}
+                    <td>{{ item.serial_number }}</td>
+                    {% endif %}
                     <!--<td contenteditable="true" name="vttag">{{ item.vt_tag }}</td> -->
                 </tr>
                 <tr>
@@ -136,26 +175,34 @@
                 </tr>
                 <tr>
                     <th>Purchase Order</th>
+                    {% if item.purchase_order == ""%}
                     <td><input name="porder" type="text" placeholder="Purchase order goes here" class="form-control" value="{{ item.purchase_order }}"></td>
+                    {% else %}
+                    <td>{{ item.purchase_order }}</td>
+                    {% endif %}
                 </tr>
                 <tr>
                     <th>Purchase Date</th>
                     {% if item.purchase_date %}
                     <td>{{ item.purchase_date }}</td>
                     {% else %}
-                    <td><input name="pdate" type="text" placeholder="Format: YYYY-MM-DD" required pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" class="form-control" value=""></td>
+                    <td><input name="pdate" type="date" placeholder="Format: YYYY-MM-DD" required pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" class="form-control" value=""></td>
                     {% endif %}
                 </tr>
                 <tr>
                     <th>Purchase Value</th>
-                    <td><input name="pvalue" type="text" placeholder="Format: $1111.11" class="form-control" value="${{ item.purchase_value }}"></td>
+                    {% if item.purchase_value %}
+                    <td>${{ item.purchase_value }}</td>
+                    {% else %}
+                    <td><input name="pvalue" type="text" placeholder="Format: $1111.11" class="form-control" value="$"></td>
+                    {% endif %}
                 </tr>
                 <tr>
                     <th>Acquisition Date</th>
                     {% if item.acquisition_date %}
                     <td>{{ item.acquisition_date }}</td>
                     {% else %}
-                    <td><input name="aquidate" type="text" placeholder="Format: YYYY-MM-DD" class="form-control" value="{{ item.acquisition_date }}"></td>
+                    <td><input name="aquidate" type="date" placeholder="Format: YYYY-MM-DD" required pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" class="form-control" value=""></td>
                     {% endif %}
                 </tr>
                 <tr>
@@ -188,20 +235,106 @@
 </div> 
 <div id="rows" class="row" style="padding: 5%;">
     <div class="col"> 
-        <a href=""><button id="assign-btn" class="btn btn-outline-secondary" type="button">
+        <button id="assign-btn" class="btn btn-outline-primary" type="button" data-toggle="modal" data-target="#myModal">
             Assign To
-        </button></a>
+        </button>
 
-        <a href="delete/"><button id="right-btn" class="btn btn-outline-secondary" type="button">
+        <a href="delete/"><button id="right-btn" class="btn btn-outline-danger confirm-delete" type="button">
             Delete Item
         </button></a>
 
         &nbsp;&nbsp;&nbsp;
-        <button id="confirm-btn" class="btn btn-outline-secondary" type="submit">
+        <button id="confirm-btn" class="btn btn-outline-success" type="submit">
             Apply Changes
         </button>
     </div>
 </div>
 </form>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Check Out Form</h4>
+          <button type="button" class="close" data-dismiss="modal" style="text-align: left;">&times;</button>
+          
+        </div>
+        <div class="modal-body">
+          <form method="POST" action="/itemdetails/{{item.id}}/checkout_form/">
+            {% csrf_token %}
+            <div class="row" style="width: 100%; ">
+                <div class="column" style="width: 100%; height: auto; padding: 0%;">
+                 <table class="table table-responsive" style="border: 0px;">
+                    <thead>
+                        <tr>
+                            <th id="title" colspan="2" style="font-size: 12pt; text-align: left;">Checked Out To (Faculty/Staff Member): </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Name:</th>
+                            <td><input name="name" type="text" placeholder="John Doe" class="form-control" value=""></td>
+                        </tr>
+                        <tr>
+                            <th>Office:</th>
+                            <td><input name="office" type="text" placeholder="Office Name" class="form-control" value=""></td>
+                        </tr>
+                        <tr>
+                            <th>Email:</th>
+                            <td><input name="email" type="email" placeholder="jdoe@mail.com" class="form-control" value=""></td>
+                        </tr>
+                        <tr>
+                            <th>Phone:</th>
+                            <td><input name="phone" type="text" placeholder="111-111-1111" required pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="form-control" value=""></td>
+                        </tr>
+                    </tbody>    
+                 </table>
+                 <table class="table table-responsive" style="border: 0px;">
+                    <thead>
+                        <tr>
+                            <th id="title" colspan="2" style="font-size: 12pt; text-align: left;">For Use By (Faculty/Staff Member): </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th> First Name:</th>
+                            <td><input name="firstNameFac" type="text" placeholder="John" class="form-control" value=""></td>
+                        </tr>
+                        <tr>
+                            <th> Last Name:</th>
+                            <td><input name="lastNameFac" type="text" placeholder="Doe" class="form-control" value=""></td>
+                        </tr>
+                        <tr>
+                            <th>Email:</th>
+                            <td><input name="emailFac" type="email" placeholder="jdoe@mail.com" class="form-control" value=""></td>
+                        </tr>
+                        <tr>
+                            <th>Phone:</th>
+                            <td><input name="phoneFac" type="text" placeholder="111-111-1111" required pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" class="form-control" value=""></td>
+                        </tr>
+                        <tr>
+                            <th>PID:</th>
+                            <td><input name="pidFac" type="text" placeholder="905487739" required pattern="[0-9]{9}" class="form-control" value=""></td>
+                        </tr>
+                    </tbody>    
+                 </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="confirm-btn" class="btn btn-outline-success" type="submit" style="float: left;">
+                Show Form
+            </button>
+            <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
 {% endif %}
 {% endblock %}

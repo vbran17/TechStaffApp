@@ -118,6 +118,50 @@ def gen_ipv6(request, b_name, item_id):
     return redirect('/itemdetails/%i/' % item_id)
 
 @login_required
+def checkout_form(request, item_id):
+    equip = Equipment.objects.get(id=item_id)
+    name = request.POST.get('name', '').strip()
+    office = request.POST.get('office', '').strip()
+    email = request.POST.get('email', '').strip()
+    phone = request.POST.get('phone', '').strip()
+    firstNameFac = request.POST.get('firstNameFac', '').strip()
+    lastNameFac = request.POST.get('lastNameFac', '').strip()
+    emailFac = request.POST.get('emailFac', '').strip()
+    phoneFac = request.POST.get('phoneFac', '').strip()
+    pidFac = request.POST.get('pidFac', '').strip()
+
+    checked = Checkout()
+    checked.equipment = equip
+    inventoryUser = InventoryUser.objects.filter(pid=pidFac)
+    #there is an inverntory user already 
+    if len(inventoryUser) > 0:
+        checked.contact = inventoryUser[0]
+        checked.save()
+    else:
+        # need to create a new Inventory User
+        newInven = InventoryUser()
+        newInven.phone_number = phoneFac
+        newInven.pid = pidFac
+        getUser = User.objects.filter(email=emailFac)
+        if len(getUser) > 0:
+            # there is a user in the system 
+            newInven.user = getUser[0]
+            newInven.save()
+        else:
+            # create a new user username is email and password is pid
+            user = User.objects.create_user(username=emailFac, email=emailFac, password=pidFac)
+            user.first_name = firstNameFac
+            user.last_name = lastNameFac
+            #user.last_name 
+            user.save()
+            newInven.user = user
+            newInven.user.save()
+            newInven.save()
+    context = {'name':name, 'office':office, 'email':email, 'phone':phone, 'equip': equip, 'checked':checked}
+    return render(request, 'inventory/checkout.html', context)
+
+
+@login_required
 def apply_changes(request, item_id):
     equip = Equipment.objects.get(id=item_id)
     CSTag = request.POST.get('cstag','').strip()
@@ -141,26 +185,31 @@ def apply_changes(request, item_id):
     if equip:
         pval = PurchaseValue[1:len(PurchaseValue)]
         print("Purchase Value %s" % pval)
-        equip.purchase_value = pval
-        equip.purchase_order = PurchaseOrder
-        if equip.purchase_date:
-            print("do nothing")
-        else:
+        if not equip.purchase_value:
+            equip.purchase_value = pval
+        if not equip.purchase_order:
+            equip.purchase_order = PurchaseOrder
+        if not equip.purchase_date:
             equip.purchase_date = PurchaseDate
-        if equip.acquisition_date: 
-            print("Do nothing")
-        else:
+        if not equip.acquisition_date: 
             equip.acquisition_date = AcquistionDate
-        
         equip.dept = Department
-        equip.mail_exchange = MailExchange
+        if not equip.mail_exchange:
+            print("NAME FOR MAIL EXCHANGE")
+            print(MailExchange)
+            host = Hostname.objects.get(hostname=MailExchange)
+            equip.mail_exchange = host
         equip.notes = Notes
-        equip.cs_tag = CSTag
-        equip.vt_tag = VTTag
+        if not equip.cs_tag:
+            equip.cs_tag = CSTag
+        if not equip.vt_tag:
+            equip.vt_tag = VTTag
         equip.description = Description
-        equip.room = Room
+        if not equip.room:
+            equip.room = Room
         equip.status = Status
-        equip.serial_number = SerialNum
+        if not equip.serial_number:
+            equip.serial_number = SerialNum
         equip.classification = Classification
         equip.save()
         print('New Notes: ')
@@ -186,7 +235,8 @@ def apply_changes(request, item_id):
                     equip.hostname.in_use = False
                     equip.hostname = host[0]
                     equip.hostname.save()
-                    messages.success(request, "Hostname Reassigned!")
+                    #messages.success(request, "Hostname Reassigned!")
+                    messages.add_message(request, messages.SUCCESS, "Hostname Reassigned!")
                     # create new command stamp
                     newCommand = History()
                     newCommand.command = "Hostname Reassigned"
@@ -196,12 +246,14 @@ def apply_changes(request, item_id):
                     newCommand.equipment = equip
                     newCommand.save()
                 else:
-                    messages.success(request, "Hostname currently in use")
+                  #  messages.success(request, "Hostname currently in use")
+                    messages.add_message(request, messages.SUCCESS, "Hostname currently in use")
             else:
                 equip.hostname = host[0]
                 equip.hostname.in_use = True
                 equip.hostname.save()
-                messages.success(request, "Hostname Assigned!")
+                #messages.success(request, "Hostname Assigned!")
+                messages.add_message(request, messages.SUCCESS, "Hostname Assigned!")
                 # create new command stamp
                 newCommand = History()
                 newCommand.command = "Hostname assigned"
@@ -216,12 +268,14 @@ def apply_changes(request, item_id):
                 # messages.info(request, "Hostname in use")
                 print("Lol")
             else:
-                messages.info(request, "Hostname not found under building %s or it is being used" % equip.building.name)
+               # messages.info(request, "Hostname not found under building %s or it is being used" % equip.building.name)
+                messages.add_message(request, messages.ERROR, "Hostname not found under building %s or it is being used" % equip.building.name)
         if equip.hostname:
             if equip.hostname.aliases != Alias:
                 equip.hostname.aliases = Alias
                 equip.hostname.save()
-                messages.info(request, "Alias Added!")
+                #messages.info(request, "Alias Added!")
+                messages.add_message(request, messages.SUCCESS, "Alias added!")
                 # create new command stamp
                 newCommand = History()
                 newCommand.command = "Alias changed"
@@ -233,9 +287,11 @@ def apply_changes(request, item_id):
             else: 
                 print("Lol")
         else:
-            messages.info(request, "Cannot assign aliases to empty hostname!")
+            #messages.info(request, "Cannot assign aliases to empty hostname!")
+            messages.add_message(request, messages.ERROR, "Cannot assign aliases to empty hostname!")
     else:
-        messages.info(request, "Equipment not found")
+        #messages.info(request, "Equipment not found")
+        messages.add_message(request, messages.ERROR, "Equipment not found")
         print("Equpiment not found")
     return redirect('/itemdetails/%i/' % item_id)
 
@@ -452,8 +508,9 @@ def itemdetails_view(request, item_id):
     # print(item)
     executore = "carnold@vt.edu"
     history = History.objects.filter(equipment=id_item)
+    hostnames = Hostname.objects.all()
     print(history)
-    return render(request, 'inventory/itemdetails.html', {'item': item, 'history': history})
+    return render(request, 'inventory/itemdetails.html', {'item': item, 'history': history, 'hostnames': hostnames})
 
 @login_required
 def item_delete(request, item_id):

@@ -1,0 +1,204 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/equipment.css' %}" />
+<link
+    href="https://www.cssscript.com/demo/sticky.css"
+    rel="stylesheet"
+    type="text/css"
+/>
+    <!-- Title -->
+    <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>
+          Computer Science Checkout Form
+        </title>
+      </head>
+      <body bgcolor="FFFFFF" text="000000">
+      <center>
+        <img src="{% static 'gifs/header.gif' %}">
+        <h2>
+          Equipment Checkout Form
+        </h2>
+        All equipment checked out is property of the CS Dept. and should be returned in 
+        exactly the same condition.  All equipment is inventoried.  By signing below, you
+        agree that you are responisble for this equipment and its return.  Faculty/Staff
+        loaner machines must be returned.
+        <p>
+        </p></center>
+        <table cellpadding="2" cellspacing="2" border="0">
+        <tbody><tr>
+          <td colspan="2">
+            <b>VT Property #:</b>
+          </td>
+          <td>
+            <u>{{ equip.vt_tag}}</u>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2"> 
+            <b>CS Property #:</b>
+          </td>
+          <td>
+            <u>{{ equip.cs_tag }}</u>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <b>Serial #:</b>
+          </td>
+          <td>
+            <u>{{ equip.serial_number }}</u>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <b>Description:</b>
+          </td>
+          <td>
+            <u>{{ equip.description }}</u>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <b>Purchase Order:</b>
+          </td>
+          <td>
+            <u>{{ equip.purchase_order }}</u>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3">
+            <b>Checked Out To (Faculty/Staff Member):</b>
+          </td>
+        </tr>
+        <tr>
+          <td width="50">
+          </td>
+          <td>
+            Name:
+          </td>
+          <td>
+            <u>{{ name }}</u>
+          </td>
+        </tr>
+        <tr>
+          <td width="50">
+          </td>
+          <td>
+            Office:
+          </td>
+          <td>
+            <u>{{ office }}</u>
+          </td>
+        </tr>
+        <tr>
+          <td width="50">
+          </td>
+          <td>
+            Email:
+          </td>
+          <td>
+            <u> {{email}}
+          </u></td>
+        </tr>
+        <tr>
+            <td width="50">
+            </td>
+            <td>
+              Phone:
+            </td>
+            <td>
+              <u> {{phone}}
+            </u></td>
+          </tr>
+        <tr>
+          <td colspan="3">
+             <b>For Use By (Faculty/Staff/Grad Student):</b>
+          </td>
+        </tr>
+        <tr>
+          <td width="50">
+          </td>
+          <td>
+            Name: 
+          </td>
+          <td>
+            <u>{{ checked.contact.user.first_name }} &nbsp; {{ checked.contact.user.last_name }}</u>
+          </td>
+        </tr>
+        <tr>
+          <td width="50">
+          </td>
+          <td>
+            Email:
+          </td>
+          <td>
+            <u>{{ checked.contact.user.email }}</u>
+          </td>
+        </tr>
+        <tr>
+            <td width="50">
+            </td>
+            <td>
+              Phone:
+            </td>
+            <td>
+              <u>{{ checked.contact.phone_number }}</u>
+            </td>
+          </tr>
+        <tr>
+          <td colspan="3">
+            <b>Check one:</b>
+          </td>
+        </tr>
+        <tr>
+          <td width="50">
+          </td>
+          <td> 
+            <img width="70" height="30" src="{% static 'gifs/underline.gif' %}" valign="bottom"> 
+          </td>
+          <td width="700">
+            This device will remain within the United States while in my care.
+          </td>
+        </tr>
+        <tr>
+          <td width="50">
+          </td>
+          <td>
+            <img width="70" height="30" src="{% static 'gifs/underline.gif' %}" valign="bottom"> 
+          </td>
+          <td>This device may be shipped or transported during international
+    travel by myself or my students. I have attended OESRC training and understand I must contact that office for current regulations review and to file appropriate documents before the device leaves the US.
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <b>Signature:</b>
+          </td>
+          <td>
+            <img width="300" height="30" src="{% static 'gifs/underline.gif' %}" valign="bottom">
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <b>Date Checked Out:</b>
+          </td>
+          <td height="30">
+            <u>{{ checked.checkoutdate }}</u>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <b>Date Checked In:</b>
+          </td>
+          <td>
+            <img width="300" height="30" src="{% static 'gifs/underline.gif' %}" valign="bottom">
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <b>Department Head/Designee Signature:</b>
+          </td>
+          <td>
+            <img width="300" height="30" src="{% static 'gifs/underline.gif' %}" valign="bottom">
+          </td>
+        </tr>
+        </tbody></table>
