@@ -7,6 +7,8 @@ class InventoryUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="User")
     phone_number = models.CharField(max_length=20, blank=True, null=True, verbose_name="Phone number")
     pid = models.CharField(max_length=255, blank=True, null=True, verbose_name="PID")
+    def __str__(self):
+        return self.user.first_name + ' ' + self.user.last_name
 
 class Building(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True, verbose_name="Building")

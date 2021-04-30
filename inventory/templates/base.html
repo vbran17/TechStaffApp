@@ -53,6 +53,7 @@
             <span class="mx-2"><font color="white">Home</font></span>
           </a>
         </li>
+        {% if request.user.is_superuser %}
         <li>
           <a href="/admin/auth/admin_view" class="nav-link" role="button">
             <span class="mx-2"><font color="white">Admin</font></span>
@@ -63,6 +64,7 @@
             <span class="mx-2"><font color="white">IP Dashboard</font></span>
           </a>
         </li>
+        {% endif %}
         <li>
           <a href="/logout" class="nav-link" role="button">
             <span class="mx-2"><font color="white">Logout</font></span>

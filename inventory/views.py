@@ -34,19 +34,15 @@ from django.forms import formset_factory
 def home_view(request):
     # Handles search query
     context = {}
-    #context['options'] = {"VT Tag": "vttag", "CS Tag": "cstag", "Serial Number": "serial_number",
-    #                      "Manufacturer": "manufacturer_model", "Custodian": "custodian", "Hostname": "hostname",
-    #                      "Building": "building", "IP": "ip"}
-    #query = ""
-    #selected_option = ""
-    if request.method == "GET":
-        query = request.GET.get('search')
-        selected_option = request.GET.get('search_options')
-        context["query"] = query
-        context["selected_option"] = selected_option
-    context['equipments'] = Equipment.objects.all()
+    if request.user.is_superuser:
+        context['equipments'] = Equipment.objects.all()
+    else: # if request.user.is_staff
+        user = User.objects.get(id=request.user.id)
+        inventory_user = InventoryUser.objects.get(user=user)
+        print(inventory_user)
+        checkouts = Checkout.objects.filter(contact=inventory_user)
+        context['equipments'] = checkouts.only('equipment')
     return render(request, 'inventory/home.html', context)
-
 
 def login_view(request):
     if request.method == 'POST':

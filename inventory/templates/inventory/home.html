@@ -27,6 +27,7 @@
 <h1 class="d-flex justify-content-center align-items-center">Home</h1>
 
 <!-- Add Equipment -->
+{% if request.user.is_superuser %}
 <a href="/addequipment" class="btn btn-outline-secondary" role="button">
   <i class="bi bi-plus-square"></i> &nbsp; Add Equipment</a
 >
@@ -34,7 +35,7 @@
   <i class="bi bi-download"></i>
   &nbsp; Generate DNS Form</a
 >
-
+{% endif %}
 <!-- Equipment Table-->
 <div class="table-responsive">
   <table
@@ -50,7 +51,9 @@
         <th>Manufacturer/Model</th>
         <th>Building</th>
         <th>VT Tag</th>
+        {% if request.user.is_superuser %}
         <th>Actions</th>
+        {% endif %}
       </tr>
     </thead>
     <tbody>
@@ -62,6 +65,7 @@
         <td>{{ equipment.manufacturer_model }}</td>
         <td>{{ equipment.building.name }}</td>
         <td>{{ equipment.vt_tag }}</td>
+        {% if request.user.is_superuser %}
         <td>
           <a href="/itemdetails/{{equipment.id}}/"
             ><button
@@ -73,6 +77,7 @@
             </button></a
           >
         </td>
+        {% endif %}
       </tr>
       {% endfor %}
     </tbody>
@@ -80,15 +85,9 @@
 </div>
 
 <script>
+
   $(document).ready(function () {
-    $("#equipmentTable").DataTable({
-      columnDefs: [
-        {
-          targets: [6],
-          orderable: false,
-        },
-      ],
-    });
+    $("#equipmentTable").DataTable();
     $(".dataTables_length").addClass("bs-select");
   });
 </script>
