@@ -1,0 +1,86 @@
+{% extends 'base.html' %} {% block content %} {% load static %}
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+/>
+<script
+  src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"
+  type="text/javascript"
+></script>
+
+<!-- MDBootstrap Datatables  -->
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'mdb/css/addons/datatables.min.css' %}"
+/>
+
+<!-- MDBootstrap Datatables  -->
+<script src="{% static 'mdb/js/addons/datatables.min.js' %}"></script>
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css"
+/>
+
+<!-- Title -->
+<h1 class="d-flex justify-content-center align-items-center">Your Checked Equipment</h1>
+
+<!-- Equipment Table-->
+<div class="table-responsive">
+  <table
+    id="equipmentTable"
+    class="table table-bordered table-hover table-striped"
+    style="width: 100%"
+  >
+    <thead>
+      <tr>
+        <th>CS Tag</th>
+        <th>Custodian</th>
+        <th>Hostname</th>
+        <th>Manufacturer/Model</th>
+        <th>Building</th>
+        <th>VT Tag</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for equipment in equipments %}
+      <tr>
+        <th scope="row">{{ equipment.cs_tag }}</th>
+        <td>{{ equipment.custodian }}</td>
+        <td>{{ equipment.hostname.hostname }}</td>
+        <td>{{ equipment.manufacturer_model }}</td>
+        <td>{{ equipment.building.name }}</td>
+        <td>{{ equipment.vt_tag }}</td>
+        <td>
+          <a href="/itemdetails/{{equipment.id}}/"
+            ><button
+              class="btn btn-outline-secondary"
+              type="button"
+              style="font-size: 14px; padding: 2px"
+            >
+              View
+            </button></a
+          >
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script>
+  $(document).ready(function () {
+    $("#equipmentTable").DataTable({
+      columnDefs: [
+        {
+          targets: [6],
+          orderable: false,
+        },
+      ],
+    });
+    $(".dataTables_length").addClass("bs-select");
+  });
+</script>
+{% endblock %}

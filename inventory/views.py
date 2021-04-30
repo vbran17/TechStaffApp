@@ -58,6 +58,12 @@ def login_view(request):
             return redirect('/home')
     return render(request, 'inventory/login.html')
 
+def user_home(request):
+    context = {
+        'equipments': Equipment.objects.all()
+    }
+    return render(request, 'inventory/userCheckedEquipment.html', context)
+
 def logout_view(request):
     logout(request)
     return redirect('/login')
