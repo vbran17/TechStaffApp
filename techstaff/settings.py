@@ -30,7 +30,8 @@ ALLOWED_HOSTS = []
 
 # FOR STATIC FILES (.css and .js)
 STATIC_URL = '/static/'
-
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/user/accounts/'
 
 # Application definition
 

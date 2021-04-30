@@ -7,6 +7,7 @@ from django.views.generic.base import RedirectView
 app_name = 'inventory'
 
 urlpatterns = [
+    path('logout/', views.logout_view, name='logout'),
     path('login/', views.login_view, name='login'),
     path('', RedirectView.as_view(url='http://localhost:8000/login/'), name='login-redirect'),
     path('home/', views.home_view, name='home'),

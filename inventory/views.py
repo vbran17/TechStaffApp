@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import Permission, User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from .models import *
 from django.db.models import Q
 from django.contrib.auth.models import User
@@ -29,6 +30,7 @@ from django.forms import formset_factory
 
 
 # Create your views here.
+@login_required
 def home_view(request):
     # Handles search query
     context = {}
@@ -56,11 +58,11 @@ def login_view(request):
             return redirect('/home')
     return render(request, 'inventory/login.html')
 
-
 def logout_view(request):
     logout(request)
-    # redirect to a success page.
+    return redirect('/login')
 
+@login_required
 def gen_ipv6(request, b_name, item_id):
     building = Building.objects.filter(id=b_name)
     if len(building) == 0:
@@ -96,6 +98,8 @@ def gen_ipv6(request, b_name, item_id):
     print("Ypu are in IPv6")
     
     return redirect('/itemdetails/%i/' % item_id)
+
+@login_required
 def apply_changes(request, item_id):
     equip = Equipment.objects.get(id=item_id)
     CSTag = request.POST.get('cstag','').strip()
@@ -155,6 +159,7 @@ def apply_changes(request, item_id):
         print("Equpiment not found")
     return redirect('/itemdetails/%i/' % item_id)
 
+@login_required
 def gen_ipv4(request, b_name, item_id):
     ipv4 = IP.objects.filter(building=b_name,in_use=False, ip_type='I4')
     if len(ipv4) > 0:
@@ -194,6 +199,7 @@ def gen_ipv4(request, b_name, item_id):
     # change the in_use form
     return redirect('/itemdetails/%i/' % item_id)
 
+@login_required
 def admin_view(request):
     context = {}
     context["Users"] = User.objects.all()
@@ -220,6 +226,7 @@ def admin_view(request):
 
     return render(request, 'inventory/admin.html', context)
 
+@login_required
 def IPDash(request):
     context = { }
     context['hostname_form'] = HostnameForm(request.POST or None)
@@ -309,6 +316,7 @@ def IPDash(request):
 
     return render(request, "inventory/ip-dashboard.html", context)
 
+@login_required
 def getBuilding(request):
     print("in building method")
     if request.method == "GET" and request.is_ajax():
@@ -319,6 +327,7 @@ def getBuilding(request):
         }
         return JsonResponse(data, status=200)
 
+@login_required
 def getIPv6(request):
     print("in getIPv6 method")
     if request.method == "GET" and request.is_ajax():
@@ -329,7 +338,7 @@ def getIPv6(request):
         }
         return JsonResponse(data, status=200)
 
-
+@login_required
 def ipdash_view_filter(request):
     building_objects = Building.objects.all()
     IP_objects = IP.objects.all()
@@ -339,6 +348,7 @@ def ipdash_view_filter(request):
     }
     return render(request, 'inventory/ip-dashboard.html', context)
 
+@login_required
 def itemdetails_view(request, item_id):
     # run a query to get all the info for the item_id
     id_item = int(item_id)
@@ -354,6 +364,7 @@ def itemdetails_view(request, item_id):
     print(history)
     return render(request, 'inventory/itemdetails.html', {'item': item, 'history': history})
  
+@login_required
 def item_delete(request, item_id):
     print(request.path)
     request.path = "/home/"
@@ -361,7 +372,7 @@ def item_delete(request, item_id):
     print(request.path_info)
     return redirect('/home/')
 
-
+@login_required
 def dns_view(request):
     items = Equipment.objects.all()
     size = len(items)
@@ -385,9 +396,11 @@ def dns_view(request):
     writer.writerow([total])
     return response
 
-
+@login_required
 def addequipment_view(request):
-    form = EquipmentForm(request.POST or None)
+    context = {}
+    context["EquipmentForm"] = EquipmentForm(request.POST or None)
+    #context["HostnameForm"] = 
     '''
     if request.method == "GET":
         print(form.cleaned_data["hostname"])
@@ -396,19 +409,19 @@ def addequipment_view(request):
     if form.is_valid():
         form.save()
         return redirect('/home')
-    return render(request, 'inventory/addequipment.html', {'form':form})
+    return render(request, 'inventory/addequipment.html', context)
 
+@login_required
 def homeuseform_view(request):
     return render(request, 'events/index.html')
 
-
+@login_required
 def networkform_view(request):
     return render(request, 'events/index.html')
 
-
+@login_required
 def searchqueryform_view(request):
     return render(request, 'events/index.html')
-
 
 def get_equipment_queryset(query=None, filter=None):
     if query:
