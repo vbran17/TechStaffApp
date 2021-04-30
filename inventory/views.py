@@ -42,7 +42,10 @@ def home_view(request):
         inventory_user = InventoryUser.objects.get(user=user)
         print(inventory_user)
         checkouts = Checkout.objects.filter(contact=inventory_user)
-        context['equipments'] = checkouts.only('equipment')
+        context['equipments'] = []
+        for c in checkouts:
+            context['equipments'].append(Equipment.objects.get(id=c.equipment.id))
+        print(context['equipments'])
     return render(request, 'inventory/home.html', context)
 
 def login_view(request):
