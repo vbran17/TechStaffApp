@@ -549,9 +549,11 @@ def dns_view(request):
     #writer.writerow([results])  
     writer.writerow(['NAME', 'IP_ADDRESS', 'MAILXCHANGE', 'ALIAS', 'COMMENT'])  
     for i in items:
-        value = value + int(i.purchase_value)
-        ip = i.hostname.ipv4.address + ',' + i.hostname.ipv6.address
-        writer.writerow([i.hostname.hostname, ip, i.mail_exchange, i.hostname.aliases, i.notes])  
+        if i.hostname is not None:
+            if i.hostname.ipv4.address is not None or i.hostname.ipv6.address is not None:
+                value = value + int(i.purchase_value)
+                ip = i.hostname.ipv4.address + ',' + i.hostname.ipv6.address
+                writer.writerow([i.hostname.hostname, ip, i.mail_exchange, i.hostname.aliases, i.notes])  
     total = 'Total value: $%i' % (value)
     print(results)
     print(total)
@@ -570,7 +572,7 @@ def addequipment_view(request):
         return JsonResponse({"abc": 123})
     '''
     if context["EquipmentForm"].is_valid():
-        context["EqupimentForm"].save()
+        context["EquipmentForm"].save()
         return redirect('/home')
     return render(request, 'inventory/addequipment.html', context)
 

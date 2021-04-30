@@ -44,25 +44,25 @@ class Hostname(models.Model):
         return self.hostname
 
 class Equipment(models.Model):
-    vt_tag = models.CharField(max_length=255, blank=True, verbose_name="VT tag")
+    vt_tag = models.CharField(max_length=255, blank=True, null=True, verbose_name="VT tag")
     building = models.ForeignKey(Building, blank=True, null=True, on_delete=models.RESTRICT, verbose_name="Building")
-    room = models.CharField(max_length=15, blank=True, verbose_name="Room")
-    manufacturer_model = models.CharField(max_length=255, blank=True, verbose_name="Manufacturer/Model")
-    serial_number = models.CharField(max_length=255, blank=True, verbose_name="Serial number")
-    description = models.CharField(max_length=1000, blank=True, verbose_name="Description")
-    classification =  models.CharField(max_length=255, blank=True, verbose_name="Classification")
-    custodian = models.CharField(max_length=255, blank=True, verbose_name="Custodian")
-    purchase_order = models.CharField(max_length=255, blank=True, verbose_name="Purchase order")
+    room = models.CharField(max_length=15, blank=True, null=True, verbose_name="Room")
+    manufacturer_model = models.CharField(max_length=255, blank=True, null=True, verbose_name="Manufacturer/Model")
+    serial_number = models.CharField(max_length=255, blank=True, null=True, verbose_name="Serial number")
+    description = models.CharField(max_length=1000, blank=True, null=True, verbose_name="Description")
+    classification =  models.CharField(max_length=255, blank=True, null=True, verbose_name="Classification")
+    custodian = models.CharField(max_length=255, blank=True, null=True, verbose_name="Custodian")
+    purchase_order = models.CharField(max_length=255, blank=True, null=True, verbose_name="Purchase order")
     purchase_date = models.DateField(blank=True, null=True, verbose_name="Purchase date")
     purchase_value = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True, verbose_name="Purchase value")
     acquisition_date = models.DateField(blank=True, null=True, verbose_name="Acquisition date")
-    hostname = models.ForeignKey(Hostname, on_delete=models.RESTRICT, blank=True, related_name="Hostname", verbose_name="Hostname")
-    dept = models.CharField(max_length=10, blank=True, verbose_name="Department")
-    status = models.CharField(max_length=128, blank=True, verbose_name="Status")
+    hostname = models.ForeignKey(Hostname, on_delete=models.RESTRICT, blank=True, null=True, related_name="Hostname", verbose_name="Hostname")
+    dept = models.CharField(max_length=10, blank=True, null=True, verbose_name="Department")
+    status = models.CharField(max_length=128, blank=True, null=True, verbose_name="Status")
     mail_exchange = models.ForeignKey(Hostname, on_delete=models.RESTRICT, blank=True, null=True, related_name="MailExchangeHostname", verbose_name="Mail exchange")
     #have to change mail exchange to hostname 
-    cs_tag = models.CharField(max_length=255, blank=True, verbose_name="CS tag")
-    notes = models.CharField(max_length=10000, blank=True, verbose_name="Notes")
+    cs_tag = models.CharField(max_length=255, blank=True, null=True, verbose_name="CS tag")
+    notes = models.CharField(max_length=10000, blank=True, null=True, verbose_name="Notes")
 
 class Checkout(models.Model):
     contact = models.ForeignKey(InventoryUser, on_delete=models.RESTRICT, blank=True, verbose_name="Contact")
