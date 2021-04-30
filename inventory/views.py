@@ -15,7 +15,7 @@ from .forms import EquipmentForm
 import re
 from django import forms
 from django.http import HttpResponse, JsonResponse
-from .forms import EquipmentForm, HostnameForm, BuildingForm, IPRangeForm
+from .forms import EquipmentForm, HostnameForm, BuildingForm, IPRangeForm, IPv6Form
 from django.core import serializers
 from django.contrib import messages
 
@@ -234,6 +234,7 @@ def IPDash(request):
     context['hostname_form'] = HostnameForm(request.POST or None)
     context['building_form'] = BuildingForm(request.POST or None)
     context['ip_range_form'] = IPRangeForm(request.POST or None)
+    context['ipv6_form'] = IPv6Form(request.POST or None)
     context['building_objects'] = Building.objects.all()
     context['IPS'] = IP.objects.all()
     context['Hosts'] = Hostname.objects.all()
@@ -243,6 +244,7 @@ def IPDash(request):
             value = request.POST['IP_ID']
             IP.objects.get(id=value).delete()
             messages.add_message(request, messages.SUCCESS, str(value) + "IP deleted")
+            return HttpResponseRedirect("/ipdashboard")
         elif request.POST.get('buildingsubmit'):
             if context['building_form'].is_valid():
                 if Building.objects.filter(name=context['building_form'].cleaned_data['name']).count() > 0:
@@ -253,7 +255,6 @@ def IPDash(request):
                 return HttpResponseRedirect("/ipdashboard")
         elif request.POST.get('iprangesubmit'):
             if context['ip_range_form'].is_valid():
-                print("Entered ip range form case")
                 selected_building = context['ip_range_form'].cleaned_data['building']
                 ip_or_range_start = context['ip_range_form'].cleaned_data['ip_range_begin']
 
@@ -291,7 +292,6 @@ def IPDash(request):
                             building=selected_building,
                             address=ip_or_range_start,
                             in_use=False)
-                        print("Successful add of IPV4")
                         messages.add_message(request, messages.SUCCESS, "IPv4 submitted!")
                 
                 return HttpResponseRedirect("/ipdashboard")
@@ -303,14 +303,25 @@ def IPDash(request):
                     messages.add_message(request, messages.ERROR, "Hostname: " + context['hostname_form'].cleaned_data['hostname'] + " already in DB")
                 else:
                     selected_building = context['hostname_form'].cleaned_data['building']
-                    new_author = context['hostname_form'].save(commit=False)   
-                    host_ipv6 = request.POST.get('ip_range_begin')
-                    ipv6_obj = IP.objects.create(
-                        building=selected_building,
-                        address=host_ipv6,
-                        ip_type=IP.IPv6,
-                        in_use=True)
-                    new_author.ipv6 = ipv6_obj
+                    new_author = context['hostname_form'].save(commit=False) 
+
+
+                    if request.POST.get('ipv4'):
+                        thisID = int(request.POST.get('ipv4'))
+                        print(thisID)
+                        thisIPV4 = IP.objects.get(id=thisID)
+                        thisIPV4.in_use = True
+                        thisIPV4.save()
+                    if request.POST.get('genipv6'):  
+                        print("adding an ipv6")
+                        host_ipv6 = request.POST.get('genipv6')
+                        ipv6_obj = IP.objects.create(
+                            building=selected_building,
+                            address=selected_building.ipv6_prefix + host_ipv6,
+                            ip_type=IP.IPv6,
+                            in_use=True)
+                        new_author.ipv6 = ipv6_obj
+                        messages.add_message(request, messages.SUCCESS, "IPv6 " + selected_building.ipv6_prefix + host_ipv6 + " generated!")
                     new_author.in_use = False
                     new_author.save()
                     messages.add_message(request, messages.SUCCESS, "Hostname added!")

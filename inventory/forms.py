@@ -57,6 +57,10 @@ class IPRangeForm(forms.Form):
         RegexValidator('^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$', message="Must be valid IPv4 address, 0-255.0-255.0-255.0-255 acceptable")])
     building = forms.ModelChoiceField(queryset=Building.objects.all(), empty_label="--Select a building--")
 
+#used in conjuction with Hostname Form
+class IPv6Form(forms.Form):
+    genipv6 = forms.CharField(label='IP or IP Range Start', max_length=256)
+
 class InventoryUserForm(ModelForm):
     class Meta:
         model = InventoryUser
