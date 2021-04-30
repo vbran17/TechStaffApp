@@ -43,8 +43,8 @@ class BuildingForm(ModelForm):
         model = Building
         fields = ['name', 'ipv6_prefix']
 
-
 class HostnameForm(ModelForm):
+    ipv4 = forms.ModelChoiceField(queryset=IP.objects.filter(in_use=False, ip_type="IPv4"))
     class Meta:
         model = Hostname
         fields = ['hostname', 'building', 'ipv4', 'ipv6', 'aliases']
