@@ -7,18 +7,38 @@
       id="bootstrap-css"
     />
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <style>
+      .container-sm {
+        margin: auto;
+        width: 80%;
+        padding: 300px;
+        text-align: center;
+      }
+      .card {
+        margin: auto;
+        padding: 10px;
+        width: 50%;
+        text-align: center;
+      }
+      .card-body {
+        margin: auto;
+        width: 80%;
+        padding: 10px;
+        text-align: center;
+      }
+    </style>
   </head>
 
-  <body>
+  <body style="background-color: #7a0f18;">
     <div class="container-sm">
       <div class="row">
         <div class="card">
           <article class="card-body">
-            <h4 class="card-title mb-4 mt-1">Log in</h4>
+            <h3 class="card-title mb-4 mt-1">Login</h3>
             <form method="POST">
               {% csrf_token %}
               <div class="form-group">
-                <label>Your username</label>
+                <label>Please enter your credientials to login</label>
                 <input
                   name="username"
                   class="form-control"
@@ -28,14 +48,20 @@
               </div>
               <!-- form-group// -->
               <div class="form-group">
-                <label>Your password</label>
                 <input
                   class="form-control"
-                  placeholder="******"
+                  placeholder="Password"
                   type="password"
                   name="password"
                 />
               </div>
+              {% if messages %}
+              {% for message in messages %}
+              <div class="alert alert-danger" role="alert">
+                {{ message }}
+              </div>
+              {% endfor %}
+              {% endif %}
               <!-- form-group// -->
               <div class="form-group">
                 <button type="submit" class="btn btn-primary btn-block">

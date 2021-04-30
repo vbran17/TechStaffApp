@@ -52,6 +52,8 @@ def login_view(request):
         if user is not None:
             login(request, user)
             return redirect('/home')
+        if user is None:
+            messages.error(request, "Either password/username is incorrect. Please try again!")
     return render(request, 'inventory/login.html')
 
 def user_home(request):
@@ -82,7 +84,7 @@ def gen_ipv6(request, b_name, item_id):
         if equip.hostname:
             print("Hostname specified %s" % equip.hostname.hostname)
             print(equip.hostname.ipv6.address)
-            equip.hostname.ipv6 = ipv6 
+            equip.hostname.ipv6 = ipv6
             #equip.hostname.ipv6.save()
             equip.hostname.save()
             print(equip.hostname.ipv6.address)
@@ -98,7 +100,7 @@ def gen_ipv6(request, b_name, item_id):
             print("No hostname specified")
             messages.info(request, "No hostname specified")
     print("Ypu are in IPv6")
-    
+
     return redirect('/itemdetails/%i/' % item_id)
 
 @login_required
@@ -152,7 +154,7 @@ def apply_changes(request, item_id):
                 equip.hostname.aliases = Alias
                 equip.hostname.save()
                 messages.info(request, "Alias Added!")
-            else: 
+            else:
                 print("Lol")
         else:
             messages.info(request, "Cannot assign aliases to empty hostname!")
@@ -169,7 +171,7 @@ def gen_ipv4(request, b_name, item_id):
         print(freeIP.address)
         freeIP.in_use = True
         print(freeIP.in_use)
-        # map it to the equipment 
+        # map it to the equipment
         equip = Equipment.objects.get(id=item_id)
         print(equip.hostname.id)
         if equip.hostname.ipv4:
@@ -197,7 +199,7 @@ def gen_ipv4(request, b_name, item_id):
     else:
         messages.info(request, "No Free IP found for building range")
         print("No free IP found")
-    
+
     # change the in_use form
     return redirect('/itemdetails/%i/' % item_id)
 
@@ -275,7 +277,7 @@ def IPDash(request):
                                 IP.objects.create(
                                     building=selected_building,
                                     address=address,
-                                    in_use=False)  
+                                    in_use=False)
                                 ip_count = ip_count + 1
                         if ip_count > 0:
                             messages.add_message(request, messages.SUCCESS, str(ip_count) + " IPv4(s) submitted!")
@@ -293,7 +295,7 @@ def IPDash(request):
                             address=ip_or_range_start,
                             in_use=False)
                         messages.add_message(request, messages.SUCCESS, "IPv4 submitted!")
-                
+
                 return HttpResponseRedirect("/ipdashboard")
             else:
                 messages.add_message(request, messages.WARNING, context['ip_range_form'].errors)
@@ -303,6 +305,7 @@ def IPDash(request):
                     messages.add_message(request, messages.ERROR, "Hostname: " + context['hostname_form'].cleaned_data['hostname'] + " already in DB")
                 else:
                     selected_building = context['hostname_form'].cleaned_data['building']
+<<<<<<< HEAD
                     new_author = context['hostname_form'].save(commit=False) 
 
 
@@ -322,10 +325,20 @@ def IPDash(request):
                             in_use=True)
                         new_author.ipv6 = ipv6_obj
                         messages.add_message(request, messages.SUCCESS, "IPv6 " + selected_building.ipv6_prefix + host_ipv6 + " generated!")
+=======
+                    new_author = context['hostname_form'].save(commit=False)
+                    host_ipv6 = request.POST.get('ip_range_begin')
+                    ipv6_obj = IP.objects.create(
+                        building=selected_building,
+                        address=host_ipv6,
+                        ip_type=IP.IPv6,
+                        in_use=True)
+                    new_author.ipv6 = ipv6_obj
+>>>>>>> Added styling to login page and error message for incorrect info
                     new_author.in_use = False
                     new_author.save()
                     messages.add_message(request, messages.SUCCESS, "Hostname added!")
-            return HttpResponseRedirect("/ipdashboard")        
+            return HttpResponseRedirect("/ipdashboard")
 
     return render(request, "inventory/ip-dashboard.html", context)
 
@@ -376,7 +389,7 @@ def itemdetails_view(request, item_id):
     history = History.objects.filter(equipment=id_item)
     print(history)
     return render(request, 'inventory/itemdetails.html', {'item': item, 'history': history})
- 
+
 @login_required
 def item_delete(request, item_id):
     print(request.path)
@@ -413,7 +426,7 @@ def dns_view(request):
 def addequipment_view(request):
     context = {}
     context["EquipmentForm"] = EquipmentForm(request.POST or None)
-    #context["HostnameForm"] = 
+    #context["HostnameForm"] =
     '''
     if request.method == "GET":
         print(form.cleaned_data["hostname"])
