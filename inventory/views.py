@@ -305,7 +305,6 @@ def IPDash(request):
                     messages.add_message(request, messages.ERROR, "Hostname: " + context['hostname_form'].cleaned_data['hostname'] + " already in DB")
                 else:
                     selected_building = context['hostname_form'].cleaned_data['building']
-<<<<<<< HEAD
                     new_author = context['hostname_form'].save(commit=False) 
 
 
@@ -325,16 +324,6 @@ def IPDash(request):
                             in_use=True)
                         new_author.ipv6 = ipv6_obj
                         messages.add_message(request, messages.SUCCESS, "IPv6 " + selected_building.ipv6_prefix + host_ipv6 + " generated!")
-=======
-                    new_author = context['hostname_form'].save(commit=False)
-                    host_ipv6 = request.POST.get('ip_range_begin')
-                    ipv6_obj = IP.objects.create(
-                        building=selected_building,
-                        address=host_ipv6,
-                        ip_type=IP.IPv6,
-                        in_use=True)
-                    new_author.ipv6 = ipv6_obj
->>>>>>> Added styling to login page and error message for incorrect info
                     new_author.in_use = False
                     new_author.save()
                     messages.add_message(request, messages.SUCCESS, "Hostname added!")
