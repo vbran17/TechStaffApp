@@ -57,8 +57,8 @@ class Equipment(models.Model):
     purchase_value = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True, verbose_name="Purchase value")
     acquisition_date = models.DateField(blank=True, null=True, verbose_name="Acquisition date")
     hostname = models.ForeignKey(Hostname, on_delete=models.RESTRICT, blank=True, null=True, related_name="Hostname", verbose_name="Hostname")
-    dept = models.CharField(max_length=10, blank=True, null=True, verbose_name="Department")
-    status = models.CharField(max_length=128, blank=True, null=True, verbose_name="Status")
+    dept = models.CharField(max_length=10, blank=True, verbose_name="Department")
+    status = models.CharField(max_length=128, blank=True, verbose_name="Status")
     mail_exchange = models.ForeignKey(Hostname, on_delete=models.RESTRICT, blank=True, null=True, related_name="MailExchangeHostname", verbose_name="Mail exchange")
     #have to change mail exchange to hostname 
     cs_tag = models.CharField(max_length=255, blank=True, null=True, verbose_name="CS tag")

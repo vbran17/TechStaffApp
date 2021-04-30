@@ -200,8 +200,11 @@ def apply_changes(request, item_id):
         if not equip.mail_exchange:
             print("NAME FOR MAIL EXCHANGE")
             print(MailExchange)
-            host = Hostname.objects.get(hostname=MailExchange)
-            equip.mail_exchange = host
+            if MailExchange == "":
+                print("NALLY")
+            else:
+                host = Hostname.objects.get(hostname=MailExchange)
+                equip.mail_exchange = host
         equip.notes = Notes
         if not equip.cs_tag:
             equip.cs_tag = CSTag
@@ -552,14 +555,22 @@ def dns_view(request):
     #writer.writerow([results])  
     writer.writerow(['NAME', 'IP_ADDRESS', 'MAILXCHANGE', 'ALIAS', 'COMMENT'])  
     for i in items:
+        #value = value + int(i.purchase_value)
+        mail = ""
+        if i.mail_exchange is not None:
+            mail = i.mail_exchange
         if i.hostname is not None:
-            if i.hostname.ipv4.address is not None or i.hostname.ipv6.address is not None:
-                value = value + int(i.purchase_value)
-                ip = i.hostname.ipv4.address + ',' + i.hostname.ipv6.address
-                writer.writerow([i.hostname.hostname, ip, i.mail_exchange, i.hostname.aliases, i.notes])  
-    total = 'Total value: $%i' % (value)
-    print(results)
-    print(total)
+            ip = ""
+            if i.hostname.ipv4 is not None:
+                ip = ip + i.hostname.ipv4.address + ','
+            if i.hostname.ipv6 is not None:
+                ip = ip + i.hostname.ipv6.address
+            #ip = i.hostname.ipv4.address + ',' + i.hostname.ipv6.address
+           # writer.writerow([i.hostname.hostname, ip, i.mail_exchange, i.hostname.aliases, i.notes])  
+            writer.writerow([i.hostname.hostname, ip, mail, i.hostname.aliases, i.notes]) 
+    #total = 'Total value: $%i' % (value)
+    #print(results)
+    #print(total)
     
     #writer.writerow([total])
     return response  
