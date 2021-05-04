@@ -150,6 +150,8 @@ def checkout_form(request, item_id):
             # there is a user in the system 
             newInven.user = getUser[0]
             newInven.save()
+            checked.contact = newInven
+            checked.save()
         else:
             # create a new user username is email and password is pid
             user = User.objects.create_user(username=emailFac, email=emailFac, password=pidFac)
@@ -157,9 +159,12 @@ def checkout_form(request, item_id):
             user.last_name = lastNameFac
             #user.last_name 
             user.save()
-            newInven.user = user
+            newInven.user = user 
             newInven.user.save()
             newInven.save()
+            checked.contact = newInven
+            checked.save()
+        # checked.save()
     context = {'name':name, 'office':office, 'email':email, 'phone':phone, 'equip': equip, 'checked':checked}
     return render(request, 'inventory/checkout.html', context)
 
